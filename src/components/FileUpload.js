@@ -2,11 +2,13 @@ import { Box, Button } from '@mui/material';
 
 function FileUpload() {
     const handleFileUpload = (e) => {
-        console.log("here")
+
+        console.log("here", e)
         if (!e.target.files) {
             return;
         }
 
+        console.log(e.target.files[0])
 
         //  const file = e.target.files[0];
         //  const { name } = file;
@@ -36,9 +38,10 @@ function FileUpload() {
                 id="raised-button-file"
                 multiple
                 type="file"
+                onChange={handleFileUpload}
             />
             <label htmlFor="raised-button-file">
-                <Button variant="raised" component="span" onClick={handleFileUpload}>
+                <Button variant="raised" component="span">
                     Upload
                 </Button>
             </label>
