@@ -1,6 +1,6 @@
 import { Box, Button } from '@mui/material';
 
-function FileUpload() {
+function FileUpload({ onFileUploaded, ...props }) {
     const handleFileUpload = (e) => {
 
         console.log("here", e)
@@ -8,7 +8,7 @@ function FileUpload() {
             return;
         }
 
-        console.log(e.target.files[0])
+        onFileUploaded(e.target.files[0])
 
         //  const file = e.target.files[0];
         //  const { name } = file;

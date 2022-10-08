@@ -1,86 +1,74 @@
 import * as React from 'react';
 //import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
+//import TextField from '@mui/material/TextField';
+//import FormControlLabel from '@mui/material/FormControlLabel';
+//import Checkbox from '@mui/material/Checkbox';
+//import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import FileUpload from '../components/FileUpload';
+import { useState } from 'react';
+import httpService from '../services/http.service';
+import { Typography } from '@mui/material';
+import StaqTool from './StaqTool';
 
 function Home() {
-    //const handleSubmit = (event) => {
-    //    event.preventDefault();
-    //    const data = new FormData(event.currentTarget);
-    //    console.log({
-    //        email: data.get('email'),
-    //        password: data.get('password'),
-    //    });
-    //};
+
+    const [isUploaded, setIsUploaded] = useState(false);
+    const [data, setData] = useState({});
+    const [result, setResult] = useState(null);
+    const onFileUploaded = (e) => {
+        console.log(e);
+        let file = e;
+        setData(file);
+        setIsUploaded(true);
+    };
+
+    const uploadData = (event) => {
+        console.log(event);
+        let formData = new FormData();
+        formData.append("file", data);
+
+        httpService.post('/', formData)
+            .then(async (res) => {
+                console.log(res);
+                setResult(res.data);
+            })
+            .catch((error) => {
+                console.log(error);
+            })
+            .finally();
+    };
 
     return (
         <Box
         >
-            <Box component="form" noValidate sx={{ mt: 3 }}>
+            <StaqTool />
+            {/*<Box component="form" noValidate sx={{ mt: 3 }}>
                 <Grid container spacing={2}>
                     <Grid item xs={12} sm={12}>
-                        <FileUpload />
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                        <TextField
-                            required
-                            fullWidth
-                            id="lastName"
-                            label="Last Name"
-                            name="lastName"
-                            autoComplete="family-name"
-                        />
-                    </Grid>
-                    <Grid item xs={12}>
-                        <TextField
-                            required
-                            fullWidth
-                            id="email"
-                            label="Email Address"
-                            name="email"
-                            autoComplete="email"
-                        />
-                    </Grid>
-                    <Grid item xs={12}>
-                        <TextField
-                            required
-                            fullWidth
-                            name="password"
-                            label="Password"
-                            type="password"
-                            id="password"
-                            autoComplete="new-password"
-                        />
-                    </Grid>
-                    <Grid item xs={12}>
-                        <FormControlLabel
-                            control={<Checkbox value="allowExtraEmails" color="primary" />}
-                            label="I want to receive inspiration, marketing promotions and updates via email."
-                        />
+                        <FileUpload onFileUploaded={onFileUploaded} />
                     </Grid>
                 </Grid>
-                <Button
-                    type="submit"
-                    fullWidth
-                    variant="contained"
-                    sx={{ mt: 3, mb: 2 }}
-                >
-                    Sign Up
-                </Button>
-                <Grid container justifyContent="flex-end">
-                    <Grid item>
-                        <Link href="#" variant="body2">
-                            Already have an account? Sign in
-                        </Link>
-                    </Grid>
-                </Grid>
-            </Box>
+                {isUploaded &&
+                    <Box>
+                        <Grid item xs={12} sm={12}>
+                            Uploaded
+                        </Grid>
+                        <Button
+                            fullWidth
+                            variant="contained"
+                            sx={{ mt: 3, mb: 2 }}
+                            onClick={uploadData}
+                        >
+                            Submit
+                        </Button>
+                        {result &&
+                            <Typography variant="body1">{result}</Typography>
+                        }
+                    </Box>}
+            </Box>*/}
         </Box>
     );
 }

@@ -13,8 +13,8 @@ function Copyright(props) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
       {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
+      <Link color="inherit" href="https://softwareq.ca/">
+        softwareQ Inc.
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
@@ -22,23 +22,29 @@ function Copyright(props) {
   );
 }
 
-const theme = createTheme();
+const theme = createTheme({
+  palette: {
+    background: {
+      //default: "#e4f0e2"
+    }
+  },
+});
 function App() {
   return (
     <ThemeProvider theme={theme}>
-      <Container component="main" maxWidth="sm">
+      <Container component="main" maxWidth="md">
         <CssBaseline />
         <Box sx={{
           marginTop: 8,
           display: 'flex',
           flexDirection: 'row',
           alignItems: 'center',
-          justifyContent: 'center'
+          //justifyContent: 'center'
         }}>
           <img src={Logo} alt="softwareq" width={50} height={50} />
-          <Typography component="h1" variant="h4">
-            &nbsp; | Staq
-          </Typography>
+          {/*<Typography component="h1" variant="h3">
+          &nbsp; | Staq
+        </Typography>*/}
         </Box>
         <Home />
         <Copyright sx={{ mt: 5 }} />
