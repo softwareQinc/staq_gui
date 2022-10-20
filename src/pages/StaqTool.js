@@ -33,29 +33,8 @@ function StaqTool() {
     const [result, setResult] = useState(null);
     const [showSnackbar, setShowSnackbar] = useState(false)
     const [snackbarData, setSnackbarData] = useState({})
-    const onFileUploaded = (e) => {
-        console.log(e);
-        let file = e;
-        setData(file);
-        setIsUploaded(true);
-        displaySnackbar("file uploaded", 'success')
-    };
-
-    const uploadData = (event) => {
-        console.log(event);
-        let formData = new FormData();
-        formData.append("file", data);
-
-        httpService.post('/', formData)
-            .then(async (res) => {
-                console.log(res);
-                setResult(res.data);
-            })
-            .catch((error) => {
-                console.log(error);
-            })
-            .finally();
-    };
+    const [activeStep, setActiveStep] = React.useState(0);
+    const [tools, setTools] = useState([]);
 
     const displaySnackbar = (msg, severity) => {
         setSnackbarData({ msg: msg, severity: severity })
@@ -65,7 +44,7 @@ function StaqTool() {
             setSnackbarData(null);
         }, 2000);
     }
-    const [activeStep, setActiveStep] = React.useState(0);
+
     const handleNext = () => {
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
     };
@@ -77,6 +56,37 @@ function StaqTool() {
     const handleReset = () => {
         setActiveStep(0);
     };
+
+    const handleChangeTools = (list) => {
+        console.log(list)
+        setTools(list);
+    }
+
+    const onFileUploaded = (e) => {
+        console.log(e);
+        let file = e;
+        setData(file);
+        setIsUploaded(true);
+        displaySnackbar("file uploaded", 'success')
+    };
+
+
+    const uploadData = (event) => {
+        console.log(event);
+        let formData = new FormData();
+        formData.append("file", data);
+        formData.append("config", JSON.stringify({ operations: tools }))
+        httpService.post('/', formData)
+            .then(async (res) => {
+                console.log(res);
+                setResult(res.data);
+            })
+            .catch((error) => {
+                console.log(error);
+            })
+            .finally();
+    };
+
     return (
         <>
             <Grid container spacing={2}>
@@ -97,7 +107,7 @@ function StaqTool() {
                                 </StepLabel>
                                 <StepContent>
                                     {/*<Typography>{step.description}</Typography>*/}
-                                    <ToolBox />
+                                    <ToolBox onChangingList={handleChangeTools} />
                                     <Box sx={{ mb: 2 }}>
                                         <div>
                                             <Button
@@ -128,7 +138,6 @@ function StaqTool() {
                                 </StepLabel>
                                 <StepContent>
                                     {/*<Typography>{step.description}</Typography>*/}
-                                    {/*<ToolBox />*/}
                                     <FileUpload onFileUploaded={onFileUploaded} />
                                     <Box sx={{ mb: 2 }}>
                                         <div>
@@ -159,12 +168,11 @@ function StaqTool() {
                                 </StepLabel>
                                 <StepContent>
                                     {/*<Typography>{step.description}</Typography>*/}
-                                    {/*<ToolBox />*/}
                                     <Box sx={{ mb: 2 }}>
                                         <div>
                                             <Button
                                                 variant="contained"
-                                                onClick={handleNext}
+                                                onClick={uploadData}
                                                 sx={{ mt: 1, mr: 1 }}
                                             >
                                                 Calculate
@@ -184,7 +192,7 @@ function StaqTool() {
                 </Grid>
                 <Grid item xs={4}>
                     <Box className="card-container">
-                        <div>ss</div>
+                        <div>{result}</div>
                     </Box>
                 </Grid>
                 {/*<Formik
@@ -199,7 +207,6 @@ function StaqTool() {
                 >{({ handleSubmit, ...props }) => {
                     return (
                         <>
-                            <ToolBox />
                             <Grid item xs={4}>
                                 <Grid container spacing={2}>
                                     <Grid item xs={12} sm={12}>
