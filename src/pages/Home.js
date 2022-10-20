@@ -42,8 +42,7 @@ function Home() {
     };
 
     return (
-        <Box
-        >
+        <>
             <StaqTool />
             {/*<Box component="form" noValidate sx={{ mt: 3 }}>
                 <Grid container spacing={2}>
@@ -69,7 +68,7 @@ function Home() {
                         }
                     </Box>}
             </Box>*/}
-        </Box>
+        </>
     );
 }
 

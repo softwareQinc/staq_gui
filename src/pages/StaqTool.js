@@ -9,14 +9,14 @@ import Box from '@mui/material/Box';
 import FileUpload from '../components/FileUpload';
 import React, { useState } from 'react';
 import httpService from '../services/http.service';
-import { Checkbox, FormControl, FormControlLabel, FormGroup, FormLabel, Radio, RadioGroup, Snackbar, TextField, Typography } from '@mui/material';
+import { Checkbox, FormControl, FormControlLabel, FormGroup, FormLabel, Radio, RadioGroup, Snackbar, TextField, Typography, Text, Stepper, Step, StepLabel, StepContent } from '@mui/material';
 import { Formik, FieldArray, useFormikContext } from 'formik';
 import * as yup from "yup";
 import { Label } from '@mui/icons-material';
-import { TOOLS_CONSTANT } from '../constants/constants';
 import SnackbarComponent from '../components/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import AlertComponent from '../components/Snackbar';
+import ToolBox from '../components/ToolBox';
 
 function StaqTool() {
     const initialValues = {
@@ -27,7 +27,7 @@ function StaqTool() {
         tools: yup.array().min(1).of(yup.string().required()).required(),
     });
 
-    const tools = TOOLS_CONSTANT;
+    //const tools = TOOLS_CONSTANT;
     const [isUploaded, setIsUploaded] = useState(false);
     const [data, setData] = useState({});
     const [result, setResult] = useState(null);
@@ -65,10 +65,129 @@ function StaqTool() {
             setSnackbarData(null);
         }, 2000);
     }
+    const [activeStep, setActiveStep] = React.useState(0);
+    const handleNext = () => {
+        setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    };
+
+    const handleBack = () => {
+        setActiveStep((prevActiveStep) => prevActiveStep - 1);
+    };
+
+    const handleReset = () => {
+        setActiveStep(0);
+    };
     return (
         <>
-            <Grid>
-                <Formik
+            <Grid container spacing={2}>
+                <Grid item xs={8}>
+                    <Box className="card-container">
+                        <Stepper
+                            activeStep={activeStep}
+                            orientation="vertical">
+                            <Step>
+                                <StepLabel
+                                //optional={
+                                //    index === 2 ? (
+                                //        <Typography variant="caption">Last step</Typography>
+                                //    ) : null
+                                //}
+                                >
+                                    Staq Tool
+                                </StepLabel>
+                                <StepContent>
+                                    {/*<Typography>{step.description}</Typography>*/}
+                                    <ToolBox />
+                                    <Box sx={{ mb: 2 }}>
+                                        <div>
+                                            <Button
+                                                variant="contained"
+                                                onClick={handleNext}
+                                                sx={{ mt: 1, mr: 1 }}
+                                            >
+                                                Continue
+                                            </Button>
+                                            {/*<Button
+                                                disabled={index === 0}
+                                                //onClick={handleBack}
+                                                sx={{ mt: 1, mr: 1 }}
+                                            >
+                                                Back
+                                            </Button>*/}
+                                        </div>
+                                    </Box>
+                                </StepContent>
+                            </Step>
+                            <Step>
+                                <StepLabel
+                                //optional={
+                                //    <Typography variant="caption">Last step</Typography>
+                                //}
+                                >
+                                    Upload File
+                                </StepLabel>
+                                <StepContent>
+                                    {/*<Typography>{step.description}</Typography>*/}
+                                    {/*<ToolBox />*/}
+                                    <FileUpload onFileUploaded={onFileUploaded} />
+                                    <Box sx={{ mb: 2 }}>
+                                        <div>
+                                            <Button
+                                                variant="contained"
+                                                onClick={handleNext}
+                                                sx={{ mt: 1, mr: 1 }}
+                                            >
+                                                Continue
+                                            </Button>
+                                            <Button
+                                                onClick={handleBack}
+                                                sx={{ mt: 1, mr: 1 }}
+                                            >
+                                                Back
+                                            </Button>
+                                        </div>
+                                    </Box>
+                                </StepContent>
+                            </Step>
+                            <Step>
+                                <StepLabel
+                                //optional={
+                                //    <Typography variant="caption">Last step</Typography>
+                                //}
+                                >
+                                    Select Output Type
+                                </StepLabel>
+                                <StepContent>
+                                    {/*<Typography>{step.description}</Typography>*/}
+                                    {/*<ToolBox />*/}
+                                    <Box sx={{ mb: 2 }}>
+                                        <div>
+                                            <Button
+                                                variant="contained"
+                                                onClick={handleNext}
+                                                sx={{ mt: 1, mr: 1 }}
+                                            >
+                                                Calculate
+                                            </Button>
+                                            <Button
+                                                onClick={handleBack}
+                                                sx={{ mt: 1, mr: 1 }}
+                                            >
+                                                Back
+                                            </Button>
+                                        </div>
+                                    </Box>
+                                </StepContent>
+                            </Step>
+                        </Stepper>
+                    </Box>
+                </Grid>
+                <Grid item xs={4}>
+                    <Box className="card-container">
+                        <div>ss</div>
+                    </Box>
+                </Grid>
+                {/*<Formik
                     initialValues={initialValues}
                     validationSchema={validationSchema}
                     validateOnChange={false}
@@ -80,31 +199,7 @@ function StaqTool() {
                 >{({ handleSubmit, ...props }) => {
                     return (
                         <>
-                            <Grid item xs={4} style={{ backgroundColor: '#fff', padding: 20, borderRadius: 10 }}>
-                                <FieldArray
-                                    name="tools"
-                                    render={(arrayHelpers) => (
-                                        <>
-                                            {tools.map((asset, idx) => (
-                                                <FormControlLabel key={idx} control={<Checkbox
-                                                    size='sm'
-                                                    name={`tools.${idx}`}
-                                                    value={asset.key}
-                                                    checked={props.values.tools.includes(asset.key)}
-                                                    onChange={(e) => {
-                                                        if (e.target.checked) {
-                                                            arrayHelpers.push(asset.key);
-                                                        } else {
-                                                            const index = props.values.tools.indexOf(asset.key);
-                                                            arrayHelpers.remove(asset.key);
-                                                        }
-                                                    }}
-                                                />} label={asset.label} />
-                                            ))}
-                                        </>
-                                    )}
-                                />
-                            </Grid>
+                            <ToolBox />
                             <Grid item xs={4}>
                                 <Grid container spacing={2}>
                                     <Grid item xs={12} sm={12}>
@@ -134,7 +229,7 @@ function StaqTool() {
                             </Grid>
                         </>
                     )
-                }}</Formik>
+                }}</Formik>*/}
             </Grid>
             {
                 showSnackbar &&

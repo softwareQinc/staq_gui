@@ -25,7 +25,7 @@ function Copyright(props) {
 const theme = createTheme({
   palette: {
     background: {
-      //default: "#e4f0e2"
+      default: "#E7EBF0"
     }
   },
 });
@@ -34,7 +34,7 @@ function App() {
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="md">
         <CssBaseline />
-        <Box sx={{
+        {/*<Box sx={{
           marginTop: 8,
           display: 'flex',
           flexDirection: 'row',
@@ -42,12 +42,9 @@ function App() {
           //justifyContent: 'center'
         }}>
           <img src={Logo} alt="softwareq" width={50} height={50} />
-          {/*<Typography component="h1" variant="h3">
-          &nbsp; | Staq
-        </Typography>*/}
-        </Box>
+        </Box>*/}
         <Home />
-        <Copyright sx={{ mt: 5 }} />
+        {/*<Copyright sx={{ mt: 5 }} />*/}
       </Container>
     </ThemeProvider>
   );
