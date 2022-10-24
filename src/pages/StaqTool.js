@@ -4,7 +4,7 @@ import Box from '@mui/material/Box';
 import FileUpload from '../components/FileUpload';
 import React, { useState } from 'react';
 import httpService from '../services/http.service';
-import { Stepper, Step, StepLabel, StepContent } from '@mui/material';
+import { Stepper, Step, StepLabel, StepContent, Alert } from '@mui/material';
 import AlertComponent from '../components/Snackbar';
 import ToolBox from '../components/ToolBox';
 
@@ -12,12 +12,14 @@ function StaqTool() {
 
     //const tools = TOOLS_CONSTANT;
     const [isUploaded, setIsUploaded] = useState(false);
-    const [data, setData] = useState({});
+    const [file, setFile] = useState(null);
     const [result, setResult] = useState(null);
     const [showSnackbar, setShowSnackbar] = useState(false)
     const [snackbarData, setSnackbarData] = useState({})
     const [activeStep, setActiveStep] = React.useState(0);
     const [tools, setTools] = useState([]);
+
+    const [alertData, setAlertData] = useState(null);
 
     const displaySnackbar = (msg, severity) => {
         setSnackbarData({ msg: msg, severity: severity })
@@ -29,6 +31,21 @@ function StaqTool() {
     }
 
     const handleNext = () => {
+        if (tools.length === 0 && activeStep === 0) {
+            setAlertData({
+                severity: 'error',
+                msg: 'Tools should be selected'
+            })
+            return;
+        }
+        if (!file && activeStep === 1) {
+            setAlertData({
+                severity: 'error',
+                msg: 'File needs to be uploaded'
+            })
+            return;
+        }
+        setAlertData(null)
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
     };
 
@@ -48,7 +65,7 @@ function StaqTool() {
     const onFileUploaded = (e) => {
         console.log(e);
         let file = e;
-        setData(file);
+        setFile(file);
         setIsUploaded(true);
         displaySnackbar("file uploaded", 'success')
     };
@@ -57,23 +74,32 @@ function StaqTool() {
     const uploadData = (event) => {
         console.log(event);
         let formData = new FormData();
-        formData.append("file", data);
+        formData.append("file", file);
         formData.append("config", JSON.stringify({ operations: tools }))
         httpService.post('/', formData)
             .then(async (res) => {
                 console.log(res);
                 setResult(res.data);
+                displaySnackbar("Success", 'success')
             })
             .catch((error) => {
                 console.log(error);
+                displaySnackbar("Something went wrong", 'error')
             })
             .finally();
     };
 
     return (
         <>
-            <Grid container spacing={2}>
+            <Grid container spacing={2} alignItems="center"
+                justifyContent="center" style={{ minHeight: '100vh' }}>
                 <Grid item xs={8}>
+                    {
+                        alertData &&
+                        <Alert variant="filled" severity={alertData.severity} style={{ marginBottom: 10 }}>
+                            {alertData.msg}
+                        </Alert>
+                    }
                     <Box className="card-container">
                         <Stepper
                             activeStep={activeStep}
@@ -90,7 +116,7 @@ function StaqTool() {
                                 </StepLabel>
                                 <StepContent>
                                     {/*<Typography>{step.description}</Typography>*/}
-                                    <ToolBox onChangingList={handleChangeTools} />
+                                    <ToolBox tools={tools} onChangingList={handleChangeTools} />
                                     <Box sx={{ mb: 2 }}>
                                         <div>
                                             <Button
@@ -120,8 +146,7 @@ function StaqTool() {
                                     Upload File
                                 </StepLabel>
                                 <StepContent>
-                                    {/*<Typography>{step.description}</Typography>*/}
-                                    <FileUpload onFileUploaded={onFileUploaded} />
+                                    <FileUpload uploaded={isUploaded} upFile={file} onFileUploaded={onFileUploaded} />
                                     <Box sx={{ mb: 2 }}>
                                         <div>
                                             <Button

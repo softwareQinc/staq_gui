@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import { Box, Chip, FormControl, InputLabel, MenuItem, Select, Stack } from "@mui/material";
 import { TOOLS_CONFIG } from '../constants/constants';
 
-function ToolBox({ onChangingList, ...props }) {
+function ToolBox({ tools, onChangingList, ...props }) {
     const tool_config = TOOLS_CONFIG;
     const [currentVal, setCurrentVal] = useState('')
-    const [selectedTools, setSelectedTools] = useState([]);
+    const [selectedTools, setSelectedTools] = useState(tools);
     const handleChange = (e) => {
         setCurrentVal(e.target.value);
         setSelectedTools([...selectedTools, tool_config[e.target.value]]);
