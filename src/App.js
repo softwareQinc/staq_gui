@@ -1,26 +1,22 @@
 import './App.css';
 import * as React from 'react';
 import CssBaseline from '@mui/material/CssBaseline';
-import Link from '@mui/material/Link';
-import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Home from './pages/Home';
-import Logo from './assets/softwareq.jpg'
-import { Box } from '@mui/material';
 
-function Copyright(props) {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
-      <Link color="inherit" href="https://softwareq.ca/">
-        softwareQ Inc.
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
+//function Copyright(props) {
+//  return (
+//    <Typography variant="body2" color="text.secondary" align="center" {...props}>
+//      {'Copyright © '}
+//      <Link color="inherit" href="https://softwareq.ca/">
+//        softwareQ Inc.
+//      </Link>{' '}
+//      {new Date().getFullYear()}
+//      {'.'}
+//    </Typography>
+//  );
+//}
 
 const theme = createTheme({
   palette: {

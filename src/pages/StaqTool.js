@@ -1,31 +1,14 @@
-//import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
-//import TextField from '@mui/material/TextField';
-//import FormControlLabel from '@mui/material/FormControlLabel';
-//import Checkbox from '@mui/material/Checkbox';
-//import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import FileUpload from '../components/FileUpload';
 import React, { useState } from 'react';
 import httpService from '../services/http.service';
-import { Checkbox, FormControl, FormControlLabel, FormGroup, FormLabel, Radio, RadioGroup, Snackbar, TextField, Typography, Text, Stepper, Step, StepLabel, StepContent } from '@mui/material';
-import { Formik, FieldArray, useFormikContext } from 'formik';
-import * as yup from "yup";
-import { Label } from '@mui/icons-material';
-import SnackbarComponent from '../components/Snackbar';
-import MuiAlert from '@mui/material/Alert';
+import { Stepper, Step, StepLabel, StepContent } from '@mui/material';
 import AlertComponent from '../components/Snackbar';
 import ToolBox from '../components/ToolBox';
 
 function StaqTool() {
-    const initialValues = {
-        tools: [],
-    };
-
-    const validationSchema = yup.object().shape({
-        tools: yup.array().min(1).of(yup.string().required()).required(),
-    });
 
     //const tools = TOOLS_CONSTANT;
     const [isUploaded, setIsUploaded] = useState(false);
@@ -53,9 +36,9 @@ function StaqTool() {
         setActiveStep((prevActiveStep) => prevActiveStep - 1);
     };
 
-    const handleReset = () => {
-        setActiveStep(0);
-    };
+    //const handleReset = () => {
+    //    setActiveStep(0);
+    //};
 
     const handleChangeTools = (list) => {
         console.log(list)
@@ -195,67 +178,13 @@ function StaqTool() {
                         <div>{result}</div>
                     </Box>
                 </Grid>
-                {/*<Formik
-                    initialValues={initialValues}
-                    validationSchema={validationSchema}
-                    validateOnChange={false}
-                    validateOnBlur={false}
-                    onSubmit={(values) => {
-                        console.log("form values if validation succeed: ", values);
-                        uploadData()
-                    }}
-                >{({ handleSubmit, ...props }) => {
-                    return (
-                        <>
-                            <Grid item xs={4}>
-                                <Grid container spacing={2}>
-                                    <Grid item xs={12} sm={12}>
-                                        <FileUpload onFileUploaded={onFileUploaded} />
-                                    </Grid>
-                                </Grid>
-                                {isUploaded &&
-                                    <Box>
-                                        <Grid item xs={12} sm={12}>
-                                            Uploaded
-                                        </Grid>
-                                        <Button
-                                            fullWidth
-                                            variant="contained"
-                                            sx={{ mt: 3, mb: 2 }}
-                                            onClick={uploadData}
-                                        >
-                                            Submit
-                                        </Button>
-                                        {result &&
-                                            <Typography variant="body1">{result}</Typography>
-                                        }
-                                    </Box>}
-                            </Grid>
-                            <Grid item xs={4}>
-                                <Button onClick={handleSubmit}>SUbmit</Button>
-                            </Grid>
-                        </>
-                    )
-                }}</Formik>*/}
             </Grid>
             {
                 showSnackbar &&
                 <AlertComponent open={showSnackbar} msg={snackbarData.msg} severity={snackbarData.severity} />
             }
-            {/*<Snackbar
-                open={showSnackbar}
-                autoHideDuration={2000}
-            >
-                <Alert variant="filled" severity={snackbarData.severity ? snackbarData.severity : 'success'} sx={{ width: '100%' }}>
-                    {snackbarData.msg}
-                </Alert>
-            </Snackbar>*/}
         </>
     );
 }
-
-const Alert = React.forwardRef(function Alert(props, ref) {
-    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
-});
 
 export default StaqTool;

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Box, Chip, FormControl, InputLabel, MenuItem, Select, Snackbar, Stack } from "@mui/material";
+import { Box, Chip, FormControl, InputLabel, MenuItem, Select, Stack } from "@mui/material";
 import { TOOLS_CONFIG } from '../constants/constants';
 
 function ToolBox({ onChangingList, ...props }) {
@@ -39,7 +39,6 @@ function ToolBox({ onChangingList, ...props }) {
                     selectedTools.map((item, idx) => {
                         return (
                             <Chip key={idx} label={item.label} onDelete={() => { }} />
-                            //<div>{item.label}</div>
                         );
                     })
                 }
