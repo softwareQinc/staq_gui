@@ -53,7 +53,7 @@ function FileUpload({ uploaded, upFile, onFileUploaded, ...props }) {
         link.click();
     }
     return (
-        <Box>
+        <Box style={{ margin: 10 }}>
             {!isUploaded &&
                 <Box>
                     <input
@@ -65,13 +65,14 @@ function FileUpload({ uploaded, upFile, onFileUploaded, ...props }) {
                         onChange={handleFileUpload}
                     />
                     <label htmlFor="raised-button-file">
-                        <Button variant="raised" component="span">
-                            Upload
+                        <Button variant="outlined" component="span">
+                            Upload File
                         </Button>
                     </label>
                 </Box>
             }
-            {isUploaded &&
+            {
+                isUploaded &&
                 <TableContainer component={Paper}>
                     <Table aria-label="customized table">
                         <TableHead>
@@ -92,6 +93,7 @@ function FileUpload({ uploaded, upFile, onFileUploaded, ...props }) {
                                     <IconButton aria-label="delete" onClick={() => {
                                         setFile(null)
                                         setIsUploaded(false)
+                                        onFileUploaded(null)
                                     }}><Icon style={{ cursor: 'pointer' }}>delete</Icon>
                                     </IconButton>
                                 </StyledTableCell>
@@ -100,7 +102,7 @@ function FileUpload({ uploaded, upFile, onFileUploaded, ...props }) {
                     </Table>
                 </TableContainer>
             }
-        </Box>
+        </Box >
     );
 }
 

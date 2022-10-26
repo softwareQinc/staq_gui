@@ -32,6 +32,8 @@
   background-color: #fff;
   /*border-radius: 5%;*/
   padding: 20px;
+  height: 60vh;
+  overflow: auto;
 }
 
 @keyframes App-logo-spin {

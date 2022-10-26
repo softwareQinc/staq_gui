@@ -13,7 +13,7 @@ function ToolBox({ tools, onChangingList, ...props }) {
     }
     return (
         <Box>
-            <Box sx={{ minWidth: 120 }}>
+            <Box sx={{ minWidth: 110, }}>
                 <FormControl fullWidth>
                     <InputLabel id="demo-simple-select-label">Tools</InputLabel>
                     <Select
@@ -21,6 +21,7 @@ function ToolBox({ tools, onChangingList, ...props }) {
                         id="demo-simple-select"
                         label="Age"
                         onChange={handleChange}
+                        style={{ height: 50 }}
                         placeholder="Select"
                         value={currentVal}
                     >
@@ -34,11 +35,11 @@ function ToolBox({ tools, onChangingList, ...props }) {
                     </Select>
                 </FormControl>
             </Box>
-            <Stack direction="row" spacing={1} style={{ flexWrap: 'wrap' }}>
+            <Stack direction="row" spacing={1} style={{ flexWrap: 'wrap', marginTop: 10 }}>
                 {
                     selectedTools.map((item, idx) => {
                         return (
-                            <Chip key={idx} label={item.label} onDelete={() => { }} />
+                            <Chip key={idx} label={item.label} onDelete={() => { }} style={{ margin: 5 }} />
                         );
                     })
                 }

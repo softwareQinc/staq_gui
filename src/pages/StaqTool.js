@@ -7,13 +7,14 @@ import httpService from '../services/http.service';
 import { Stepper, Step, StepLabel, StepContent, Alert } from '@mui/material';
 import AlertComponent from '../components/Snackbar';
 import ToolBox from '../components/ToolBox';
+import { HEIGHT } from '../constants/constants';
 
 function StaqTool() {
 
     //const tools = TOOLS_CONSTANT;
     const [isUploaded, setIsUploaded] = useState(false);
     const [file, setFile] = useState(null);
-    const [result, setResult] = useState(null);
+    const [result, setResult] = useState([]);
     const [showSnackbar, setShowSnackbar] = useState(false)
     const [snackbarData, setSnackbarData] = useState({})
     const [activeStep, setActiveStep] = React.useState(0);
@@ -63,11 +64,16 @@ function StaqTool() {
     }
 
     const onFileUploaded = (e) => {
-        console.log(e);
-        let file = e;
-        setFile(file);
-        setIsUploaded(true);
-        displaySnackbar("file uploaded", 'success')
+        if (!e) {
+            setFile(null);
+            setIsUploaded(false);
+        } else {
+            console.log(e);
+            let file = e;
+            setFile(file);
+            setIsUploaded(true);
+            displaySnackbar("file uploaded", 'success')
+        }
     };
 
 
@@ -79,7 +85,7 @@ function StaqTool() {
         httpService.post('/', formData)
             .then(async (res) => {
                 console.log(res);
-                setResult(res.data);
+                setResult(res.data.split(";"));
                 displaySnackbar("Success", 'success')
             })
             .catch((error) => {
@@ -93,7 +99,7 @@ function StaqTool() {
         <>
             <Grid container spacing={2} alignItems="center"
                 justifyContent="center" style={{ minHeight: '100vh' }}>
-                <Grid item xs={8}>
+                <Grid item xs={6}>
                     {
                         alertData &&
                         <Alert variant="filled" severity={alertData.severity} style={{ marginBottom: 10 }}>
@@ -198,9 +204,13 @@ function StaqTool() {
                         </Stepper>
                     </Box>
                 </Grid>
-                <Grid item xs={4}>
+                <Grid item xs={6}>
                     <Box className="card-container">
-                        <div>{result}</div>
+                        {result.map((item, index) => {
+                            return (
+                                <div key={index}>{item}</div>
+                            );
+                        })}
                     </Box>
                 </Grid>
             </Grid>

@@ -1,3 +1,5 @@
+//import { screen } from 'electron';
+
 export const TOOLS = {
     INLINE: 'inline',
     SIMPLIFY: 'simplify',
@@ -60,3 +62,8 @@ export const TOOLS_CONFIG = {
         params: []
     }
 }
+//let primaryDisplay = screen.getPrimaryDisplay();
+//let screenDimension = primaryDisplay.workAreaSize;
+
+//export const WIDTH = screenDimension.width;
+//export const HEIGHT = screenDimension.height;
