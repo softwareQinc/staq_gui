@@ -4,6 +4,8 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Home from './pages/Home';
+import { AppBar, Box, IconButton, Toolbar, Typography } from '@mui/material';
+import MenuIcon from '@mui/icons-material/Menu';
 
 //function Copyright(props) {
 //  return (
@@ -28,8 +30,20 @@ const theme = createTheme({
 function App() {
   return (
     <ThemeProvider theme={theme}>
+      <Box sx={{ flexGrow: 1 }}>
+        <AppBar position="fixed" >
+          <Toolbar variant="dense">
+            {/*<IconButton edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }}>
+              <MenuIcon />
+            </IconButton>*/}
+            <Typography variant="h6" component="div" textTransform={'uppercase'}>
+              Staq
+            </Typography>
+          </Toolbar>
+        </AppBar>
+      </Box>
       <Container component="main" maxWidth="md">
-        <CssBaseline />
+        {/*<CssBaseline />*/}
         {/*<Box sx={{
           marginTop: 8,
           display: 'flex',

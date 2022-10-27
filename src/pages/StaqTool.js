@@ -7,7 +7,6 @@ import httpService from '../services/http.service';
 import { Stepper, Step, StepLabel, StepContent, Alert } from '@mui/material';
 import AlertComponent from '../components/Snackbar';
 import ToolBox from '../components/ToolBox';
-import { HEIGHT } from '../constants/constants';
 
 function StaqTool() {
 
@@ -100,12 +99,14 @@ function StaqTool() {
             <Grid container spacing={2} alignItems="center"
                 justifyContent="center" style={{ minHeight: '100vh' }}>
                 <Grid item xs={6}>
-                    {
-                        alertData &&
-                        <Alert variant="filled" severity={alertData.severity} style={{ marginBottom: 10 }}>
-                            {alertData.msg}
-                        </Alert>
-                    }
+                    <Box style={{ marginBottom: 10, height: 60 }}>
+                        {
+                            alertData &&
+                            <Alert variant="filled" severity={alertData.severity} >
+                                {alertData.msg}
+                            </Alert>
+                        }
+                    </Box>
                     <Box className="card-container">
                         <Stepper
                             activeStep={activeStep}
@@ -205,6 +206,7 @@ function StaqTool() {
                     </Box>
                 </Grid>
                 <Grid item xs={6}>
+                    <Box style={{ marginBottom: 10, height: 60 }}></Box>
                     <Box className="card-container">
                         {result.map((item, index) => {
                             return (
