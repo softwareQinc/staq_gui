@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Box, Chip, FormControl, FormControlLabel, Icon, IconButton, InputLabel, ListItem, MenuItem, Paper, Select, Stack, Typography } from "@mui/material";
+import { Box, Chip, FormControl, FormControlLabel, Icon, IconButton, InputLabel, ListItem, MenuItem, Paper, Select, Stack, Switch, Typography } from "@mui/material";
 import { TOOLS_CONFIG } from '../constants/constants';
 import CustomSwitch from './Switch';
 
@@ -36,39 +36,37 @@ function ToolBox({ tools, onChangingList, ...props }) {
                     </Select>
                 </FormControl>
             </Box>
-            <ListItem direction="row" spacing={1} style={{ flexWrap: 'wrap', marginTop: 10 }}>
+            <ListItem disablePadding direction="row" spacing={1} style={{ flexWrap: 'wrap', marginTop: 10, paddingHorizontal: 0 }}>
                 {
                     selectedTools.map((item, idx) => {
                         return (
-                            <Box key={idx} style={{ backgroundColor: 'lightgray', margin: 5, padding: 5, borderRadius: 10, }}>
-                                <Box>
+                            <Box key={idx} style={{ backgroundColor: 'lightgray', margin: 5, padding: 10, borderRadius: 10, }}>
+                                <Box style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                                     <Typography variant="overline">{item.label}</Typography>
                                     <IconButton aria-label="delete" onClick={() => {
                                     }}><Icon size={10} style={{ cursor: 'pointer' }}>cancel</Icon>
                                     </IconButton>
                                 </Box>
-                                <Box>
-                                    {
-                                        item.params.length > 0 &&
-                                        <>
-                                            {
-                                                item.params.map((param, paramIdx) => {
-                                                    return (
-                                                        <ParamContainer param={param} onChange={(paramState) => {
-                                                            let tools = selectedTools;
-                                                            tools[idx]['params'][paramIdx] = paramState;
+                                {
+                                    item.params.length > 0 &&
+                                    <Box>
+                                        {
+                                            item.params.map((param, paramIdx) => {
+                                                return (
+                                                    <ParamContainer param={param} onChange={(paramState) => {
+                                                        let tools = selectedTools;
+                                                        tools[idx]['params'][paramIdx] = paramState;
 
-                                                            console.log(paramState)
-                                                            setSelectedTools(tools);
-                                                            onChangingList(tools);
+                                                        console.log(paramState)
+                                                        setSelectedTools(tools);
+                                                        onChangingList(tools);
 
-                                                        }} />
-                                                    )
-                                                })
-                                            }
-                                        </>
-                                    }
-                                </Box>
+                                                    }} />
+                                                )
+                                            })
+                                        }
+                                    </Box>
+                                }
                                 {/*<Chip key={idx} label={item.label} onDelete={() => {
                                     let tools = selectedTools
                                     tools.splice(idx, 1)
@@ -87,12 +85,22 @@ function ToolBox({ tools, onChangingList, ...props }) {
 const ParamContainer = ({ param, onChange, ...props }) => {
     const [paramState, setParamState] = useState(param)
     return (
-        <FormControlLabel checked={paramState.value} control={<CustomSwitch inputProps={{ 'aria-label': paramState.label }}
-            onChange={(event) => {
-                //debugger;
-                setParamState({ ...paramState, value: event.target.checked })
-                onChange({ ...paramState, value: event.target.checked })
-            }} />} label={param.label} />
+        <>
+            <Switch checked={paramState.value} size='small' inputProps={{ 'aria-label': paramState.label }}
+                onChange={(event) => {
+                    //debugger;
+                    setParamState({ ...paramState, value: event.target.checked })
+                    onChange({ ...paramState, value: event.target.checked })
+                }} />
+            <Typography variant="caption">{param.label}</Typography>
+        </>
+
+        //<FormControlLabel checked={paramState.value} control={<CustomSwitch inputProps={{ 'aria-label': paramState.label }}
+        //    onChange={(event) => {
+        //        //debugger;
+        //        setParamState({ ...paramState, value: event.target.checked })
+        //        onChange({ ...paramState, value: event.target.checked })
+        //    }} />} label={<Typography variant="overline">{param.label}</Typography>} />
     );
 }
 

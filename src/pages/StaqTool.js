@@ -4,7 +4,7 @@ import Box from '@mui/material/Box';
 import FileUpload from '../components/FileUpload';
 import React, { useState } from 'react';
 import httpService from '../services/http.service';
-import { Stepper, Step, StepLabel, StepContent, Alert } from '@mui/material';
+import { Stepper, Step, StepLabel, StepContent, Alert, Typography } from '@mui/material';
 import AlertComponent from '../components/Snackbar';
 import ToolBox from '../components/ToolBox';
 
@@ -83,8 +83,7 @@ function StaqTool() {
         formData.append("config", JSON.stringify({ operations: tools }))
         httpService.post('/', formData)
             .then(async (res) => {
-                console.log(res);
-                setResult(res.data.split(";"));
+                setResult(res.data);
                 displaySnackbar("Success", 'success')
             })
             .catch((error) => {
@@ -207,13 +206,18 @@ function StaqTool() {
                 </Grid>
                 <Grid item xs={6}>
                     <Box style={{ marginBottom: 10, height: 60 }}></Box>
-                    <Box className="card-container">
-                        {result.map((item, index) => {
-                            return (
-                                <div key={index}>{item}</div>
-                            );
-                        })}
-                    </Box>
+                    {
+                        <Box className="card-container">
+                            <Typography style={{ whiteSpace: "pre" }}>{result}</Typography>
+                        </Box>
+                        //<Box className="card-container">
+                        //    {result.map((item, index) => {
+                        //        return (
+                        //            <div key={index}>{item}</div>
+                        //        );
+                        //    })}
+                        //</Box>
+                    }
                 </Grid>
             </Grid>
             {
