@@ -13,7 +13,7 @@ function StaqTool() {
     //const tools = TOOLS_CONSTANT;
     const [isUploaded, setIsUploaded] = useState(false);
     const [file, setFile] = useState(null);
-    const [result, setResult] = useState([]);
+    const [result, setResult] = useState(null);
     const [showSnackbar, setShowSnackbar] = useState(false)
     const [snackbarData, setSnackbarData] = useState({})
     const [activeStep, setActiveStep] = React.useState(0);
@@ -93,11 +93,24 @@ function StaqTool() {
             .finally();
     };
 
+    const downloadResultAsJSON = () => {
+        var element = document.createElement('a');
+        element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(result));
+        element.setAttribute('download', "result.qasm");
+
+        element.style.display = 'none';
+        document.body.appendChild(element);
+
+        element.click();
+
+        document.body.removeChild(element);
+    }
+
     return (
         <>
             <Grid container spacing={2} alignItems="center"
                 justifyContent="center" style={{ minHeight: '100vh' }}>
-                <Grid item xs={6}>
+                <Grid item xs={8}>
                     <Box style={{ marginBottom: 10, height: 60 }}>
                         {
                             alertData &&
@@ -204,11 +217,18 @@ function StaqTool() {
                         </Stepper>
                     </Box>
                 </Grid>
-                <Grid item xs={6}>
+                <Grid item xs={4}>
                     <Box style={{ marginBottom: 10, height: 60 }}></Box>
                     {
+                        result &&
                         <Box className="card-container">
-                            <Typography style={{ whiteSpace: "pre" }}>{result}</Typography>
+                            <Box mb={2}>
+                                <Typography variant='h6'>Output</Typography>
+                                <Button variant="outlined" color="success" component="span" onClick={downloadResultAsJSON}>
+                                    Download QASM file
+                                </Button>
+                            </Box>
+                            <Typography variant='body2' style={{ whiteSpace: "pre" }}>{result}</Typography>
                         </Box>
                         //<Box className="card-container">
                         //    {result.map((item, index) => {
