@@ -1,11 +1,13 @@
-import { Box } from '@mui/material';
+import { Box, Toolbar } from '@mui/material';
 import * as React from 'react';
 import StaqTool from './StaqTool';
 
 function Home() {
     return (
         <Box>
-            <StaqTool />
+            <Toolbar />
+            <div>Home</div>
+            {/*<StaqTool />*/}
         </Box>
     );
 }

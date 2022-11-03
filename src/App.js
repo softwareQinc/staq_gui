@@ -4,38 +4,72 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Home from './pages/Home';
-import { AppBar, Box, IconButton, Toolbar, Typography } from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
-
-//function Copyright(props) {
-//  return (
-//    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-//      {'Copyright © '}
-//      <Link color="inherit" href="https://softwareq.ca/">
-//        softwareQ Inc.
-//      </Link>{' '}
-//      {new Date().getFullYear()}
-//      {'.'}
-//    </Typography>
-//  );
-//}
-
+import { AppBar, Box, Drawer, IconButton, List, ListItem, ListItemIcon, ListItemText, Toolbar, Typography } from '@mui/material';
+import { BrowserRouter as Router, Switch, Routes, Route, Link, Navigate } from 'react-router-dom';
+import StaqTool from './pages/StaqTool';
+import DrawerComponent from './components/Drawer';
 const theme = createTheme({
   palette: {
     background: {
-      default: "#E7EBF0"
-    }
+      //default: "#E7EBF0",
+    },
   },
 });
+
+
 function App() {
   return (
     <ThemeProvider theme={theme}>
-      <Box sx={{ flexGrow: 1 }}>
+      <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
+        <Toolbar variant="dense">
+          <Typography variant="h6" component="div" textTransform={'uppercase'}>
+            Staq
+          </Typography>
+        </Toolbar>
+      </AppBar>
+      <Router>
+        <Box sx={{ display: 'flex' }}>
+          {/*<Drawer
+            variant="persistent"
+            anchor='left'
+            open={true}
+          >
+            <List>
+              <Link to="/" className='link'>
+                <ListItem button={true}>
+                  <ListItemIcon>
+                    <HomeIcon />
+                  </ListItemIcon>
+                  <ListItemText primary={"Home"} />
+                </ListItem>
+              </Link>
+              <Link to="/staqtool" className='link'>
+                <ListItem button={true}>
+                  <ListItemIcon>
+                    <MenuIcon />
+                  </ListItemIcon>
+                  <ListItemText primary={"Home"} />
+                </ListItem>
+              </Link>
+            </List>
+          </Drawer>*/}
+          <CssBaseline />
+          <DrawerComponent />
+          <Routes>
+            <Route path='/' element={<Home />} />
+            <Route path='/staqtool' element={<StaqTool />} />
+            <Route
+              path="*"
+              element={
+                <Navigate to="/" />
+              }
+            />
+          </Routes>
+        </Box>
+      </Router>
+      {/*<Box sx={{ flexGrow: 1 }}>
         <AppBar position="fixed" >
           <Toolbar variant="dense">
-            {/*<IconButton edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }}>
-              <MenuIcon />
-            </IconButton>*/}
             <Typography variant="h6" component="div" textTransform={'uppercase'}>
               Staq
             </Typography>
@@ -43,19 +77,9 @@ function App() {
         </AppBar>
       </Box>
       <Container component="main" maxWidth="md">
-        {/*<CssBaseline />*/}
-        {/*<Box sx={{
-          marginTop: 8,
-          display: 'flex',
-          flexDirection: 'row',
-          alignItems: 'center',
-          //justifyContent: 'center'
-        }}>
-          <img src={Logo} alt="softwareq" width={50} height={50} />
-        </Box>*/}
+        <CssBaseline />
         <Home />
-        {/*<Copyright sx={{ mt: 5 }} />*/}
-      </Container>
+      </Container>*/}
     </ThemeProvider>
   );
 }

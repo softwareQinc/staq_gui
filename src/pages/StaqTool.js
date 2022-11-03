@@ -4,7 +4,7 @@ import Box from '@mui/material/Box';
 import FileUpload from '../components/FileUpload';
 import React, { useState } from 'react';
 import httpService from '../services/http.service';
-import { Stepper, Step, StepLabel, StepContent, Alert, Typography } from '@mui/material';
+import { Stepper, Step, StepLabel, StepContent, Alert, Typography, Toolbar } from '@mui/material';
 import AlertComponent from '../components/Snackbar';
 import ToolBox from '../components/ToolBox';
 
@@ -108,6 +108,7 @@ function StaqTool() {
 
     return (
         <>
+            <Toolbar />
             <Grid container spacing={2} alignItems="center"
                 justifyContent="center" style={{ minHeight: '100vh' }}>
                 <Grid item xs={8}>
