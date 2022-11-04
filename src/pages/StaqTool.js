@@ -109,7 +109,7 @@ function StaqTool() {
     return (
         <>
             <Toolbar />
-            <Grid container spacing={2} alignItems="center"
+            <Grid container spacing={2}
                 justifyContent="center" style={{ minHeight: '100vh' }}>
                 <Grid item xs={8}>
                     <Box style={{ marginBottom: 10, height: 60 }}>
