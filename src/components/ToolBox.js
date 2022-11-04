@@ -13,7 +13,7 @@ function ToolBox({ tools, onChangingList, ...props }) {
         onChangingList([...selectedTools, tool_config[e.target.value]]);
     }
     return (
-        <Box>
+        <Box ph={2}>
             <Box>
                 <FormControl sx={{ m: 1, minWidth: 150 }} size='small'>
                     <InputLabel id="demo-simple-select-label">Tools</InputLabel>

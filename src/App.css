@@ -29,9 +29,9 @@
 }
 
 .card-container {
-  background-color: #fff;
+  /*background-color: #fff;*/
   /*border-radius: 5%;*/
-  padding: 20px;
+  /*padding: 20px;*/
   height: 80vh;
   overflow: auto;
 }

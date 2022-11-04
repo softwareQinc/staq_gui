@@ -4,22 +4,25 @@ import Box from '@mui/material/Box';
 import FileUpload from '../components/FileUpload';
 import React, { useState } from 'react';
 import httpService from '../services/http.service';
-import { Stepper, Step, StepLabel, StepContent, Alert, Typography, Toolbar } from '@mui/material';
+import { Stepper, Step, StepLabel, StepContent, Alert, Typography, Toolbar, StepButton, Divider } from '@mui/material';
 import AlertComponent from '../components/Snackbar';
 import ToolBox from '../components/ToolBox';
 
-function StaqTool() {
+const steps = ['Staq Tool', "Upload your file", "Calculate", "Result"]
+const CONTAINER_WIDTH = '80vw'
 
-    //const tools = TOOLS_CONSTANT;
+function StaqTool() {
     const [isUploaded, setIsUploaded] = useState(false);
     const [file, setFile] = useState(null);
     const [result, setResult] = useState(null);
     const [showSnackbar, setShowSnackbar] = useState(false)
     const [snackbarData, setSnackbarData] = useState({})
-    const [activeStep, setActiveStep] = React.useState(0);
     const [tools, setTools] = useState([]);
-
     const [alertData, setAlertData] = useState(null);
+
+    //Stepper
+    const [activeStep, setActiveStep] = React.useState(0);
+    const [completed, setCompleted] = React.useState({});
 
     const displaySnackbar = (msg, severity) => {
         setSnackbarData({ msg: msg, severity: severity })
@@ -45,12 +48,42 @@ function StaqTool() {
             })
             return;
         }
-        setAlertData(null)
-        setActiveStep((prevActiveStep) => prevActiveStep + 1);
+
+        if (activeStep == 2) {
+            uploadData();
+        } else {
+            setAlertData(null)
+            setActiveStep(activeStep + 1);
+        }
     };
 
     const handleBack = () => {
-        setActiveStep((prevActiveStep) => prevActiveStep - 1);
+        setActiveStep(activeStep - 1);
+    };
+
+    const allStepsCompleted = () => {
+        return completedSteps() === totalSteps();
+    };
+
+    const totalSteps = () => {
+        return steps.length;
+    };
+
+    const completedSteps = () => {
+        return Object.keys(completed).length;
+    };
+
+    const isLastStep = () => {
+        return activeStep === totalSteps() - 1;
+    };
+
+    const handleStep = (step) => () => {
+        setActiveStep(step);
+    };
+
+    const handleReset = () => {
+        setActiveStep(0);
+        setCompleted({});
     };
 
     //const handleReset = () => {
@@ -82,6 +115,7 @@ function StaqTool() {
             .then(async (res) => {
                 setResult(res.data);
                 displaySnackbar("Success", 'success')
+                setActiveStep(activeStep + 1);
             })
             .catch((error) => {
                 console.log(error);
@@ -90,16 +124,14 @@ function StaqTool() {
             .finally();
     };
 
-    const downloadResultAsJSON = () => {
+    // Download result as QASM
+    const downloadResultAsQASM = () => {
         var element = document.createElement('a');
         element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(result));
         element.setAttribute('download', "result.qasm");
-
         element.style.display = 'none';
         document.body.appendChild(element);
-
         element.click();
-
         document.body.removeChild(element);
     }
 
@@ -107,9 +139,9 @@ function StaqTool() {
         <>
             <Toolbar />
             <Grid container spacing={2}
-                justifyContent="center" style={{ minHeight: '100vh' }}>
-                <Grid item xs={8}>
-                    <Box style={{ marginBottom: 10, height: 60 }}>
+                justifyContent="center" style={{}}>
+                <Grid item xs={12}>
+                    <Box mt={1} style={{ width: CONTAINER_WIDTH, justifyContent: 'center' }}>
                         {
                             alertData &&
                             <Alert variant="filled" severity={alertData.severity} >
@@ -117,126 +149,81 @@ function StaqTool() {
                             </Alert>
                         }
                     </Box>
-                    <Box className="card-container">
-                        <Stepper
-                            activeStep={activeStep}
-                            orientation="vertical">
-                            <Step>
-                                <StepLabel
-                                //optional={
-                                //    index === 2 ? (
-                                //        <Typography variant="caption">Last step</Typography>
-                                //    ) : null
-                                //}
-                                >
-                                    Staq Tool
-                                </StepLabel>
-                                <StepContent>
-                                    {/*<Typography>{step.description}</Typography>*/}
-                                    <ToolBox tools={tools} onChangingList={handleChangeTools} />
-                                    <Box sx={{ mb: 2 }}>
-                                        <div>
-                                            <Button
-                                                variant="contained"
-                                                onClick={handleNext}
-                                                sx={{ mt: 1, mr: 1 }}
-                                            >
-                                                Continue
-                                            </Button>
-                                            {/*<Button
-                                                disabled={index === 0}
-                                                //onClick={handleBack}
-                                                sx={{ mt: 1, mr: 1 }}
-                                            >
-                                                Back
-                                            </Button>*/}
-                                        </div>
-                                    </Box>
-                                </StepContent>
-                            </Step>
-                            <Step>
-                                <StepLabel
-                                //optional={
-                                //    <Typography variant="caption">Last step</Typography>
-                                //}
-                                >
-                                    Upload File
-                                </StepLabel>
-                                <StepContent>
-                                    <FileUpload uploaded={isUploaded} upFile={file} onFileUploaded={onFileUploaded} />
-                                    <Box sx={{ mb: 2 }}>
-                                        <div>
-                                            <Button
-                                                variant="contained"
-                                                onClick={handleNext}
-                                                sx={{ mt: 1, mr: 1 }}
-                                            >
-                                                Continue
-                                            </Button>
-                                            <Button
-                                                onClick={handleBack}
-                                                sx={{ mt: 1, mr: 1 }}
-                                            >
-                                                Back
-                                            </Button>
-                                        </div>
-                                    </Box>
-                                </StepContent>
-                            </Step>
-                            <Step>
-                                <StepLabel
-                                //optional={
-                                //    <Typography variant="caption">Last step</Typography>
-                                //}
-                                >
-                                    Select Output Type
-                                </StepLabel>
-                                <StepContent>
-                                    {/*<Typography>{step.description}</Typography>*/}
-                                    <Box sx={{ mb: 2 }}>
-                                        <div>
-                                            <Button
-                                                variant="contained"
-                                                onClick={uploadData}
-                                                sx={{ mt: 1, mr: 1 }}
-                                            >
-                                                Calculate
-                                            </Button>
-                                            <Button
-                                                onClick={handleBack}
-                                                sx={{ mt: 1, mr: 1 }}
-                                            >
-                                                Back
-                                            </Button>
-                                        </div>
-                                    </Box>
-                                </StepContent>
-                            </Step>
+                    <Box mt={3} pb={3} style={{ width: CONTAINER_WIDTH }}>
+                        <Stepper activeStep={activeStep}
+                        >
+                            {steps.map((label, index) => (
+                                <Step key={label} completed={completed[index]}>
+                                    <StepButton color="inherit" onClick={handleStep(index)}>
+                                        {label}
+                                    </StepButton>
+                                </Step>
+                            ))}
                         </Stepper>
                     </Box>
+                    <Divider variant="middle" style={{ width: CONTAINER_WIDTH }} />
+                    <Box mt={2} pr={2} pl={2} style={{ width: CONTAINER_WIDTH, height: '80vh' }}>
+                        {activeStep == 0 && (
+                            <ToolBox tools={tools} onChangingList={handleChangeTools} />
+                        )
+                        }
+                        {activeStep == 1 &&
+                            <FileUpload uploaded={isUploaded} upFile={file} onFileUploaded={onFileUploaded} />
+                        }
+                        {activeStep == 2 &&
+                            <>
+
+                            </>
+                        }
+                        {result && activeStep == 3 &&
+                            (<Box className="card-container">
+                                <Box mb={2}>
+                                    <Typography variant='h6'>Output</Typography>
+                                    <Button variant="outlined" color="success" component="span" onClick={downloadResultAsQASM}>
+                                        Download QASM file
+                                    </Button>
+                                </Box>
+                                <Typography variant='body2' style={{ whiteSpace: "pre" }}>{result}</Typography>
+                            </Box>)
+                        }
+                        <Box sx={{ mb: 2, textAlign: 'right' }}>
+                            {activeStep !== 0 && (
+                                <Button
+                                    onClick={handleBack}
+                                    sx={{ mt: 1, mr: 1 }}
+                                >
+                                    Back
+                                </Button>
+                            )}
+                            {!isLastStep() &&
+                                (
+                                    <Button
+                                        variant="contained"
+                                        onClick={handleNext}
+                                        sx={{ mt: 1, mr: 1 }}
+                                    >
+                                        {activeStep == 2 ? 'Calculate' : 'Continue'}
+                                    </Button>
+                                )
+                            }
+                        </Box>
+                    </Box>
                 </Grid>
-                <Grid item xs={4}>
+                {/*<Grid item xs={12}>
                     <Box style={{ marginBottom: 10, height: 60 }}></Box>
                     {
                         result &&
                         <Box className="card-container">
                             <Box mb={2}>
                                 <Typography variant='h6'>Output</Typography>
-                                <Button variant="outlined" color="success" component="span" onClick={downloadResultAsJSON}>
+                                <Button variant="outlined" color="success" component="span" onClick={downloadResultAsQASM}>
                                     Download QASM file
                                 </Button>
                             </Box>
                             <Typography variant='body2' style={{ whiteSpace: "pre" }}>{result}</Typography>
                         </Box>
-                        //<Box className="card-container">
-                        //    {result.map((item, index) => {
-                        //        return (
-                        //            <div key={index}>{item}</div>
-                        //        );
-                        //    })}
-                        //</Box>
                     }
-                </Grid>
+                </Grid>*/}
             </Grid>
             {
                 showSnackbar &&
