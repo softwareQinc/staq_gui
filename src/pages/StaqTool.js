@@ -58,7 +58,6 @@ function StaqTool() {
     //};
 
     const handleChangeTools = (list) => {
-        console.log(list)
         setTools(list);
     }
 
@@ -67,7 +66,6 @@ function StaqTool() {
             setFile(null);
             setIsUploaded(false);
         } else {
-            console.log(e);
             let file = e;
             setFile(file);
             setIsUploaded(true);
@@ -77,7 +75,6 @@ function StaqTool() {
 
 
     const uploadData = (event) => {
-        console.log(event);
         let formData = new FormData();
         formData.append("file", file);
         formData.append("config", JSON.stringify({ operations: tools }))

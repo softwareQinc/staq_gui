@@ -6,8 +6,6 @@ function FileUpload({ uploaded, upFile, onFileUploaded, ...props }) {
     const [isUploaded, setIsUploaded] = useState(uploaded ? uploaded : false);
     const [file, setFile] = useState(upFile);
     const handleFileUpload = (e) => {
-
-        console.log("here", e)
         if (!e.target.files) {
             return;
         }

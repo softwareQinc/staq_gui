@@ -44,6 +44,10 @@ function ToolBox({ tools, onChangingList, ...props }) {
                                 <Box style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                                     <Typography variant="overline">{item.label}</Typography>
                                     <IconButton aria-label="delete" onClick={() => {
+                                        let tools = selectedTools
+                                        tools.splice(idx, 1)
+                                        setSelectedTools(tools)
+                                        onChangingList(tools)
                                     }}><Icon size={10} style={{ cursor: 'pointer' }}>cancel</Icon>
                                     </IconButton>
                                 </Box>
@@ -56,8 +60,6 @@ function ToolBox({ tools, onChangingList, ...props }) {
                                                     <ParamContainer key={paramIdx} param={param} onChange={(paramState) => {
                                                         let tools = selectedTools;
                                                         tools[idx]['params'][paramIdx] = paramState;
-
-                                                        console.log(paramState)
                                                         setSelectedTools(tools);
                                                         onChangingList(tools);
 
@@ -67,12 +69,6 @@ function ToolBox({ tools, onChangingList, ...props }) {
                                         }
                                     </Box>
                                 }
-                                {/*<Chip key={idx} label={item.label} onDelete={() => {
-                                    let tools = selectedTools
-                                    tools.splice(idx, 1)
-                                    setSelectedTools(tools)
-                                    onChangingList(tools)
-                                }} style={{ margin: 5 }} />*/}
                             </Box>
                         );
                     })
