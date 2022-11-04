@@ -53,7 +53,7 @@ function ToolBox({ tools, onChangingList, ...props }) {
                                         {
                                             item.params.map((param, paramIdx) => {
                                                 return (
-                                                    <ParamContainer param={param} onChange={(paramState) => {
+                                                    <ParamContainer key={paramIdx} param={param} onChange={(paramState) => {
                                                         let tools = selectedTools;
                                                         tools[idx]['params'][paramIdx] = paramState;
 
