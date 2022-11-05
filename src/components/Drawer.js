@@ -75,7 +75,7 @@ function DrawerComponent(props) {
             <List>
                 {routes.map((route, index) => (
                     //<Link to={route.path} key={index}>
-                    <ListItem selected={route.path == pathname} disablePadding={true} key={index} button={true} sx={{ display: 'block' }}
+                    <ListItem selected={route.path === pathname} disablePadding={true} key={index} button={true} sx={{ display: 'block' }}
                         component={Link} onClick={route.onClick}>
                         <ListItemButton
                             sx={{

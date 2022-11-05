@@ -13,7 +13,7 @@ function ToolBox({ tools, onChangingList, ...props }) {
         onChangingList([...selectedTools, tool_config[e.target.value]]);
     }
     return (
-        <Box ph={2}>
+        <Box>
             <Box>
                 <FormControl sx={{ m: 1, minWidth: 150 }} size='small'>
                     <InputLabel id="demo-simple-select-label">Tools</InputLabel>
@@ -36,7 +36,7 @@ function ToolBox({ tools, onChangingList, ...props }) {
                     </Select>
                 </FormControl>
             </Box>
-            <ListItem disablePadding direction="row" spacing={1} style={{ flexWrap: 'wrap', marginTop: 10, paddingHorizontal: 0 }}>
+            <ListItem disablePadding direction="row" spacing={1} style={{ flexWrap: 'wrap', marginTop: 10, paddingHorizontal: 0, height: '60vh', overflowY: 'auto' }}>
                 {
                     selectedTools.map((item, idx) => {
                         return (
