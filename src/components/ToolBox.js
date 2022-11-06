@@ -36,7 +36,7 @@ function ToolBox({ tools, onChangingList, ...props }) {
                     </Select>
                 </FormControl>
             </Box>
-            <ListItem disablePadding direction="row" spacing={1} style={{ flexWrap: 'wrap', marginTop: 10, paddingHorizontal: 0, height: '60vh', overflowY: 'auto' }}>
+            <ListItem disablePadding direction="row" spacing={1} style={{ flexWrap: 'wrap', marginTop: 10, paddingHorizontal: 0, maxHeight: '60vh', overflowY: 'auto' }}>
                 {
                     selectedTools.map((item, idx) => {
                         return (

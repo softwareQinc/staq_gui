@@ -12,9 +12,11 @@ const theme = createTheme({
     background: {
       //default: "#E7EBF0",
     },
+    //mode: 'dark'
   },
   typography: {
     fontFamily: ["Manrope", "sans-serif"].join(","),
+    //fontSize: '14px',
   },
 });
 

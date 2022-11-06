@@ -139,14 +139,15 @@ function StaqTool() {
     return (
         <>
             <Toolbar />
-            <Box style={{}}>
-                <Box mt={1} style={{}}>
-
-                </Box>
-            </Box>
             <Grid container spacing={2} style={{ marginTop: '10px' }}>
-                <Grid item sm={12} style={{ padding: 0 }}>
-                    <Box style={{ width: '40vw', height: '48px' }}>
+                <Grid item sm={12} style={{
+                    padding: 0, display: 'flex', flexDirection: 'row',
+                    alignItems: 'center', justifyContent: 'space-between'
+                }}>
+                    <Box>
+                        <Typography variant='h5'>Staq Tool</Typography>
+                    </Box>
+                    <Box mr={2} style={{ width: '40vw', height: '48px' }}>
                         {
                             alertData &&
                             <Alert variant="filled" severity={alertData.severity} >
@@ -156,7 +157,7 @@ function StaqTool() {
                         }
                     </Box>
                 </Grid>
-                <Grid item sm={2} style={{ display: 'flex', alignItems: 'center' }}>
+                <Grid item sm={2} style={{ display: 'flex' }}>
                     <Box mt={1} pr={1} pb={3}>
                         <Stepper activeStep={activeStep}
                             orientation="vertical"
@@ -169,8 +170,8 @@ function StaqTool() {
                                 </Step>
                             ))}
                         </Stepper>
-                        <Divider orientation='vertical' />
                     </Box>
+                    <Divider orientation='vertical' />
                 </Grid>
                 <Grid item sm={9} style={{
                     height: CONTAINER_HEIGHT,
