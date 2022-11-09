@@ -1,4 +1,4 @@
-import { Box, Button, Icon, IconButton, Paper, Table, TableBody, TableCell, tableCellClasses, TableContainer, TableHead, TableRow } from '@mui/material';
+import { Box, Button, Icon, IconButton, Paper, Table, TableBody, TableCell, tableCellClasses, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
 import { useState } from 'react';
 import { styled } from '@mui/material/styles';
 
@@ -52,6 +52,9 @@ function FileUpload({ uploaded, upFile, onFileUploaded, ...props }) {
     }
     return (
         <Box style={{ margin: 10 }}>
+            <Box sx={{ mt: 1, mb: 1 }}>
+                <Typography variant="h6">Upload your file</Typography>
+            </Box>
             {!isUploaded &&
                 <Box>
                     <input

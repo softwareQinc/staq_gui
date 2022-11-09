@@ -29,11 +29,13 @@
 }
 
 .card-container {
-  /*background-color: #fff;*/
-  /*border-radius: 5%;*/
-  /*padding: 20px;*/
-  height: 80vh;
-  /*overflow: auto;*/
+  background-color: lightgray !important;
+  margin: 5px;
+  padding-left: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  height: 80px;
+  width: 180px
 }
 
 .drawerPaper {

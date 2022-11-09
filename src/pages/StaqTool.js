@@ -194,7 +194,7 @@ function StaqTool() {
                         }
                         {result && activeStep === 3 &&
                             (<>
-                                <Box mb={2}>
+                                <Box mb={2} style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
                                     <Typography variant='h6'>Output</Typography>
                                     <Button variant="outlined" color="success" component="span" onClick={downloadResultAsQASM}>
                                         Download QASM file
