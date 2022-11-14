@@ -38,6 +38,7 @@
   },
   "build": {
     "appId": "stock-app",
+    "extends": null,
     "win": {
       "target": [
         "nsis"
