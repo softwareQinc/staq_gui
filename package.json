@@ -1,5 +1,5 @@
 {
-  "name": "stock-app",
+  "name": "staq",
   "version": "0.1.0",
   "private": true,
   "main": "public/electron.js",
@@ -37,7 +37,7 @@
     "build-installer": "electron-builder"
   },
   "build": {
-    "appId": "stock-app",
+    "appId": "staq",
     "extends": null,
     "win": {
       "target": [
