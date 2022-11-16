@@ -2,9 +2,11 @@
   "name": "staq",
   "version": "0.1.0",
   "private": true,
+  "author": "softwareq",
   "main": "public/electron.js",
   "homepage": "./",
   "dependencies": {
+    "@electron/remote": "^2.0.8",
     "@emotion/react": "^11.10.4",
     "@emotion/styled": "^11.10.4",
     "@mui/icons-material": "^5.10.6",
@@ -34,10 +36,12 @@
     "package": "react-scripts build && electron-forge package",
     "make-mac": "react-scripts build && electron-forge make --platform darwin",
     "make-linux": "react-scripts build && electron-forge make --platform linux",
-    "build-installer": "electron-builder"
+    "build-installer": "electron-builder -c.extraMetadata.main=build/electron.js",
+    "preelectron-pack": "yarn build",
+    "electron-pack": "react-scripts build --em.main=build/electron.js --publish=always"
   },
   "build": {
-    "appId": "staq",
+    "appId": "com.example.staq",
     "extends": null,
     "win": {
       "target": [
@@ -46,10 +50,18 @@
       "requestedExecutionLevel": "requireAdministrator"
     },
     "nsis": {
-      "uninstallDisplayName": "Stock App",
+      "uninstallDisplayName": "Staq App",
       "license": "license.txt",
       "oneClick": false,
       "allowToChangeInstallationDirectory": true
+    },
+    "files": [
+      "build/**/*",
+      "node_modules/**/*",
+      "package.json"
+    ],
+    "directories": {
+      "buildResources": "assets"
     }
   },
   "eslintConfig": {

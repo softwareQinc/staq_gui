@@ -72,4 +72,5 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 
 
 yarn dev -> development
+yarn electron-pack
 yarn build-installer -> making executable
