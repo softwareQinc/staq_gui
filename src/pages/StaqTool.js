@@ -85,6 +85,10 @@ function StaqTool() {
     const handleReset = () => {
         setActiveStep(0);
         setCompleted({});
+        setFile(null);
+        setIsUploaded(false);
+        setResult(null);
+        setTools([])
     };
 
     //const handleReset = () => {
@@ -204,27 +208,42 @@ function StaqTool() {
                             </>)
                         }
                     </Box>
-                    <Box sx={{ mt: 1, mb: 2, textAlign: 'right' }}>
-                        {activeStep !== 0 && (
-                            <Button
-                                onClick={handleBack}
-                                sx={{ mt: 1, mr: 1 }}
-                            >
-                                Back
-                            </Button>
-                        )}
-                        {!isLastStep() &&
-                            (
+                    <Grid container spacing={2}>
+                        <Grid item sm={6}>
+                            <Box sx={{ mt: 1, mb: 2, textAlign: 'left' }}>
                                 <Button
-                                    variant="contained"
-                                    onClick={handleNext}
+                                    variant="outlined"
+                                    onClick={handleReset}
                                     sx={{ mt: 1, mr: 1 }}
                                 >
-                                    {activeStep === 2 ? 'Calculate' : 'Continue'}
+                                    Reset
                                 </Button>
-                            )
-                        }
-                    </Box>
+                            </Box>
+                        </Grid>
+                        <Grid item sm={6}>
+                            <Box sx={{ mt: 1, mb: 2, textAlign: 'right' }}>
+                                {activeStep !== 0 && (
+                                    <Button
+                                        onClick={handleBack}
+                                        sx={{ mt: 1, mr: 1 }}
+                                    >
+                                        Back
+                                    </Button>
+                                )}
+                                {!isLastStep() &&
+                                    (
+                                        <Button
+                                            variant="contained"
+                                            onClick={handleNext}
+                                            sx={{ mt: 1, mr: 1 }}
+                                        >
+                                            {activeStep === 2 ? 'Calculate' : 'Continue'}
+                                        </Button>
+                                    )
+                                }
+                            </Box>
+                        </Grid>
+                    </Grid>
                 </Grid>
                 <Grid item sm={1}></Grid>
 
