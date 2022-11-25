@@ -51,9 +51,10 @@ function FileUpload({ uploaded, upFile, onFileUploaded, ...props }) {
         link.click();
     }
     return (
-        <Box style={{ margin: 10 }}>
-            <Box sx={{ mt: 1, mb: 1 }}>
+        <Box>
+            <Box sx={{ mb: 3 }}>
                 <Typography variant="h6">Upload your file</Typography>
+                <Typography variant="body2">Upload .qasm file to get results</Typography>
             </Box>
             {!isUploaded &&
                 <Box>

@@ -4,7 +4,7 @@ import Box from '@mui/material/Box';
 import FileUpload from '../components/FileUpload';
 import React, { useState } from 'react';
 import httpService from '../services/http.service';
-import { Stepper, Step, StepLabel, StepContent, Alert, Typography, Toolbar, StepButton, Divider } from '@mui/material';
+import { Stepper, Step, StepLabel, StepContent, Alert, Typography, Toolbar, StepButton, Divider, RadioGroup, Radio, FormControlLabel } from '@mui/material';
 import AlertComponent from '../components/Snackbar';
 import ToolBox from '../components/ToolBox';
 
@@ -16,6 +16,7 @@ function StaqTool() {
     const [isUploaded, setIsUploaded] = useState(false);
     const [file, setFile] = useState(null);
     const [result, setResult] = useState(null);
+    const [outputType, setOutputType] = useState('qasm')
     const [showSnackbar, setShowSnackbar] = useState(false)
     const [snackbarData, setSnackbarData] = useState({})
     const [tools, setTools] = useState([]);
@@ -193,7 +194,21 @@ function StaqTool() {
                         }
                         {activeStep === 2 &&
                             <>
-
+                                <Box>
+                                    <Typography variant='h6'>Select Output Type</Typography>
+                                    <Typography variant='body2'>Select the format in which you want your results</Typography>
+                                    <Box mt={2}>
+                                        <RadioGroup
+                                            row
+                                            aria-labelledby="demo-row-radio-buttons-group-label"
+                                            defaultValue='qasm'
+                                            value={outputType}
+                                            name="row-radio-buttons-group"
+                                        >
+                                            <FormControlLabel value="qasm" control={<Radio />} label="QASM (Open Quantum Assembly Language)" />
+                                        </RadioGroup>
+                                    </Box>
+                                </Box>
                             </>
                         }
                         {result && activeStep === 3 &&
