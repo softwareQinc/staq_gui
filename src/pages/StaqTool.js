@@ -7,6 +7,7 @@ import httpService from '../services/http.service';
 import { Stepper, Step, StepLabel, StepContent, Alert, Typography, Toolbar, StepButton, Divider, RadioGroup, Radio, FormControlLabel } from '@mui/material';
 import AlertComponent from '../components/Snackbar';
 import ToolBox from '../components/ToolBox';
+import OutputScreen from "../components/OutputScreen";
 
 const steps = ['Staq Tool', "Upload your file", "Calculate", "Result"]
 const CONTAINER_WIDTH = '80vw'
@@ -52,7 +53,11 @@ function StaqTool() {
         }
 
         if (activeStep === 2) {
-            uploadData();
+            if (outputType == 'qasm') {
+                getQASMResults();
+            } else {
+                getLatticeSurgeryResults()
+            }
         } else {
             setAlertData(null)
             setActiveStep(activeStep + 1);
@@ -113,11 +118,11 @@ function StaqTool() {
     };
 
 
-    const uploadData = (event) => {
+    const getQASMResults = (event) => {
         let formData = new FormData();
         formData.append("file", file);
         formData.append("config", JSON.stringify({ operations: tools }))
-        httpService.post('/', formData)
+        httpService.post('staq/qasm', formData)
             .then(async (res) => {
                 setResult(res.data);
                 displaySnackbar("Success", 'success')
@@ -130,16 +135,22 @@ function StaqTool() {
             .finally();
     };
 
-    // Download result as QASM
-    const downloadResultAsQASM = () => {
-        var element = document.createElement('a');
-        element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(result));
-        element.setAttribute('download', "result.qasm");
-        element.style.display = 'none';
-        document.body.appendChild(element);
-        element.click();
-        document.body.removeChild(element);
-    }
+    const getLatticeSurgeryResults = (event) => {
+        let formData = new FormData();
+        formData.append("file", file);
+        httpService.post('staq/lattice_surgery', formData)
+            .then(async (res) => {
+                debugger;
+                setResult(res.data.toString());
+                displaySnackbar("Success", 'success')
+                setActiveStep(activeStep + 1);
+            })
+            .catch((error) => {
+                console.log(error);
+                displaySnackbar("Something went wrong", 'error')
+            })
+            .finally();
+    };
 
     return (
         <>
@@ -199,28 +210,23 @@ function StaqTool() {
                                     <Typography variant='body2'>Select the format in which you want your results</Typography>
                                     <Box mt={2}>
                                         <RadioGroup
-                                            row
                                             aria-labelledby="demo-row-radio-buttons-group-label"
                                             defaultValue='qasm'
                                             value={outputType}
+                                            onChange={(e) => {
+                                                setOutputType(e.target.value)
+                                            }}
                                             name="row-radio-buttons-group"
                                         >
                                             <FormControlLabel value="qasm" control={<Radio />} label="QASM (Open Quantum Assembly Language)" />
+                                            <FormControlLabel value="lattice_surgery" control={<Radio />} label="Lattice Surgery" />
                                         </RadioGroup>
                                     </Box>
                                 </Box>
                             </>
                         }
                         {result && activeStep === 3 &&
-                            (<>
-                                <Box mb={2} style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-                                    <Typography variant='h6'>Output</Typography>
-                                    <Button variant="outlined" color="success" component="span" onClick={downloadResultAsQASM}>
-                                        Download QASM file
-                                    </Button>
-                                </Box>
-                                <Typography variant='body2' style={{ whiteSpace: "pre" }}>{result}</Typography>
-                            </>)
+                            <OutputScreen outputType={outputType} result={result} />
                         }
                     </Box>
                     <Grid container spacing={2}>
