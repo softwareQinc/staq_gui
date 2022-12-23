@@ -141,7 +141,7 @@ function StaqTool() {
         httpService.post('staq/lattice_surgery', formData)
             .then(async (res) => {
                 debugger;
-                setResult(res.data.toString());
+                setResult(res.data);
                 displaySnackbar("Success", 'success')
                 setActiveStep(activeStep + 1);
             })
