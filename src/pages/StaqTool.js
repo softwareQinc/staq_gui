@@ -8,6 +8,7 @@ import { Stepper, Step, StepLabel, StepContent, Alert, Typography, Toolbar, Step
 import AlertComponent from '../components/Snackbar';
 import ToolBox from '../components/ToolBox';
 import OutputScreen from "../components/OutputScreen";
+import ConfigSelect from "../components/ConfigSelect";
 
 const steps = ['Staq Tool', "Upload your file", "Calculate", "Result"]
 const CONTAINER_WIDTH = '80vw'
@@ -17,7 +18,15 @@ function StaqTool() {
     const [isUploaded, setIsUploaded] = useState(false);
     const [file, setFile] = useState(null);
     const [result, setResult] = useState(null);
-    const [outputType, setOutputType] = useState('qasm')
+    const [outputConfig, setOutputConfig] = useState({
+        mode: 'qasm',
+        qre: false,
+        config: {
+            scheme: 'fast',
+            p_g: 1e-3,
+            cycle_time: 1e-6
+        }
+    })
     const [showSnackbar, setShowSnackbar] = useState(false)
     const [snackbarData, setSnackbarData] = useState({})
     const [tools, setTools] = useState([]);
@@ -51,18 +60,54 @@ function StaqTool() {
             })
             return;
         }
-
+        //debugger;
         if (activeStep === 2) {
-            if (outputType == 'qasm') {
+            if (outputConfig.mode == 'qasm') {
                 getQASMResults();
             } else {
-                getLatticeSurgeryResults()
+
+                if (!validateResourceConfig(outputConfig.config)) { return; }
+
+                if (outputConfig.qre) {
+                    getQuantumResourceEstimationResults()
+                } else {
+                    getLatticeSurgeryResults()
+                }
             }
         } else {
             setAlertData(null)
             setActiveStep(activeStep + 1);
         }
     };
+
+    const validateResourceConfig = (resourceConfig) => {
+        if (!resourceConfig || !resourceConfig.scheme || !resourceConfig.p_g || !resourceConfig.cycle_time) {
+            setAlertData({
+                severity: 'error',
+                msg: 'All configuration must be entered'
+            })
+            return false;
+        }
+
+        if (Number(resourceConfig.p_g) > 1e-2 || Number(resourceConfig.p_g) < 1e-5) {
+            setAlertData({
+                severity: 'error',
+                msg: 'p_g must be between 1e-2 and 1e-5'
+            })
+            return false;
+        }
+
+
+        if (Number(resourceConfig.cycle_time) > 1e-2 || Number(resourceConfig.cycle_time) < 1e-8) {
+            setAlertData({
+                severity: 'error',
+                msg: 'cycle time must be between 1e-2 and 1e-8'
+            })
+            return false;
+        }
+        setAlertData(null)
+        return true
+    }
 
     const handleBack = () => {
         setActiveStep(activeStep - 1);
@@ -118,7 +163,7 @@ function StaqTool() {
     };
 
 
-    const getQASMResults = (event) => {
+    const getQASMResults = () => {
         let formData = new FormData();
         formData.append("file", file);
         formData.append("config", JSON.stringify({ operations: tools }))
@@ -135,15 +180,35 @@ function StaqTool() {
             .finally();
     };
 
-    const getLatticeSurgeryResults = (event) => {
+    const getLatticeSurgeryResults = () => {
         let formData = new FormData();
         formData.append("file", file);
         httpService.post('staq/lattice_surgery', formData)
             .then(async (res) => {
-                debugger;
                 setResult(res.data);
                 displaySnackbar("Success", 'success')
                 setActiveStep(activeStep + 1);
+            })
+            .catch((error) => {
+                console.log(error);
+                displaySnackbar("Something went wrong", 'error')
+            })
+            .finally();
+    };
+
+    const getQuantumResourceEstimationResults = () => {
+        let formData = new FormData();
+        formData.append("file", file);
+        formData.append("config", JSON.stringify({ config: outputConfig.config }))
+        httpService.post('staq/qre', formData)
+            .then(async (res) => {
+                if (res.statusCode == 200) {
+                    setResult(res.data);
+                    displaySnackbar("Success", 'success')
+                    setActiveStep(activeStep + 1);
+                } else {
+                    displaySnackbar("Something went wrong", 'error')
+                }
             })
             .catch((error) => {
                 console.log(error);
@@ -204,29 +269,12 @@ function StaqTool() {
                             <FileUpload uploaded={isUploaded} upFile={file} onFileUploaded={onFileUploaded} />
                         }
                         {activeStep === 2 &&
-                            <>
-                                <Box>
-                                    <Typography variant='h6'>Select Output Type</Typography>
-                                    <Typography variant='body2'>Select the format in which you want your results</Typography>
-                                    <Box mt={2}>
-                                        <RadioGroup
-                                            aria-labelledby="demo-row-radio-buttons-group-label"
-                                            defaultValue='qasm'
-                                            value={outputType}
-                                            onChange={(e) => {
-                                                setOutputType(e.target.value)
-                                            }}
-                                            name="row-radio-buttons-group"
-                                        >
-                                            <FormControlLabel value="qasm" control={<Radio />} label="QASM (Open Quantum Assembly Language)" />
-                                            <FormControlLabel value="lattice_surgery" control={<Radio />} label="Lattice Surgery" />
-                                        </RadioGroup>
-                                    </Box>
-                                </Box>
-                            </>
+                            <ConfigSelect outputConfig={outputConfig} setConfigType={(e) => {
+                                setOutputConfig(e);
+                            }} />
                         }
                         {result && activeStep === 3 &&
-                            <OutputScreen outputType={outputType} result={result} />
+                            <OutputScreen outputType={outputConfig} result={result} />
                         }
                     </Box>
                     <Grid container spacing={2}>
