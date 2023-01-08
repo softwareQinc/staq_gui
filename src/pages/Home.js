@@ -12,7 +12,7 @@ function Home() {
             <Box style={{ textAlign: 'center' }} mb={2}>
                 {/*<Avatar alt="softwareQ" src={require('../assets/softwareq.jpg')} />*/}
                 <img src={logo} alt="softwareQ" style={{ width: '50%', marginBottom: '5px' }} />
-                <Typography variant='h6'>A full-stack quantum processing toolkit</Typography>
+                <Typography variant='h6'>staq - A full-stack quantum processing toolkit</Typography>
             </Box>
             <Box style={{ textAlign: 'justify' }}>
                 <Typography paragraph>staq is a modern C++17 library for the synthesis, transformation, optimization and compilation of quantum circuits. It is usable either through the provided binary tools, or as a header-only library that can be included to provide direct support for parsing & manipulating circuits written in the <Link underline='none' target="_blank" rel="noreferrer" href="https://github.com/openqasm/openqasm">OpenQASM</Link> circuit description language.</Typography>

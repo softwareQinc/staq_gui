@@ -46,14 +46,14 @@ function StaqTool() {
     }
 
     const handleNext = () => {
-        if (tools.length === 0 && activeStep === 0) {
-            setAlertData({
-                severity: 'error',
-                msg: 'Tools should be selected'
-            })
-            return;
-        }
-        if (!file && activeStep === 1) {
+        //if (tools.length === 0 && activeStep === 1) {
+        //    setAlertData({
+        //        severity: 'error',
+        //        msg: 'Tools should be selected'
+        //    })
+        //    return;
+        //}
+        if (!file && activeStep === 0) {
             setAlertData({
                 severity: 'error',
                 msg: 'File needs to be uploaded'
@@ -102,6 +102,14 @@ function StaqTool() {
             setAlertData({
                 severity: 'error',
                 msg: 'cycle time must be between 1e-2 and 1e-8'
+            })
+            return false;
+        }
+
+        if (Number(resourceConfig.p_g) != 0.001 && Number(resourceConfig.p_g) != 0.0001) {
+            setAlertData({
+                severity: 'error',
+                msg: 'p_g must either be 0.001 or 0.0001'
             })
             return false;
         }
@@ -262,11 +270,11 @@ function StaqTool() {
                 }}>
                     <Box mt={1} pr={2} pl={2} >
                         {activeStep === 0 && (
-                            <ToolBox tools={tools} onChangingList={handleChangeTools} />
+                            <FileUpload uploaded={isUploaded} upFile={file} onFileUploaded={onFileUploaded} />
                         )
                         }
                         {activeStep === 1 &&
-                            <FileUpload uploaded={isUploaded} upFile={file} onFileUploaded={onFileUploaded} />
+                            <ToolBox tools={tools} onChangingList={handleChangeTools} />
                         }
                         {activeStep === 2 &&
                             <ConfigSelect outputConfig={outputConfig} setConfigType={(e) => {
