@@ -9,8 +9,9 @@ import AlertComponent from '../components/Snackbar';
 import ToolBox from '../components/ToolBox';
 import OutputScreen from "../components/OutputScreen";
 import ConfigSelect from "../components/ConfigSelect";
+import JSONOutputScreen from "../components/JSONOutput";
 
-const steps = ['Staq Tool', "Upload your file", "Calculate", "Result"]
+const steps = ['Upload file', "Select staq tools", "Calculate", "Lattice Surgery (optional)"]
 const CONTAINER_WIDTH = '80vw'
 const CONTAINER_HEIGHT = '80vh'
 
@@ -18,13 +19,14 @@ function StaqTool() {
     const [isUploaded, setIsUploaded] = useState(false);
     const [file, setFile] = useState(null);
     const [result, setResult] = useState(null);
+    const [latticeResult, setLatticeResult] = useState(null);
     const [outputConfig, setOutputConfig] = useState({
-        mode: 'qasm',
+        mode: 'lattice_surgery',
         qre: false,
         config: {
             scheme: 'fast',
-            p_g: 1e-3,
-            cycle_time: 1e-6
+            p_g: "0.001",
+            cycle_time: "0.00001"
         }
     })
     const [showSnackbar, setShowSnackbar] = useState(false)
@@ -61,18 +63,16 @@ function StaqTool() {
             return;
         }
         //debugger;
-        if (activeStep === 2) {
-            if (outputConfig.mode == 'qasm') {
-                getQASMResults();
+        if (activeStep == 1) {
+            getQASMResults();
+        }
+        else if (activeStep === 3) {
+            if (!validateResourceConfig(outputConfig.config)) { return; }
+
+            if (outputConfig.qre) {
+                getQuantumResourceEstimationResults()
             } else {
-
-                if (!validateResourceConfig(outputConfig.config)) { return; }
-
-                if (outputConfig.qre) {
-                    getQuantumResourceEstimationResults()
-                } else {
-                    getLatticeSurgeryResults()
-                }
+                getLatticeSurgeryResults()
             }
         } else {
             setAlertData(null)
@@ -193,9 +193,9 @@ function StaqTool() {
         formData.append("file", file);
         httpService.post('staq/lattice_surgery', formData)
             .then(async (res) => {
-                setResult(res.data);
+                setLatticeResult(res.data);
                 displaySnackbar("Success", 'success')
-                setActiveStep(activeStep + 1);
+                //setActiveStep(activeStep + 1);
             })
             .catch((error) => {
                 console.log(error);
@@ -211,9 +211,9 @@ function StaqTool() {
         httpService.post('staq/qre', formData)
             .then(async (res) => {
                 if (res.statusCode == 200) {
-                    setResult(res.data);
+                    setLatticeResult(res.data);
                     displaySnackbar("Success", 'success')
-                    setActiveStep(activeStep + 1);
+                    //setActiveStep(activeStep + 1);
                 } else {
                     displaySnackbar("Something went wrong", 'error')
                 }
@@ -277,12 +277,16 @@ function StaqTool() {
                             <ToolBox tools={tools} onChangingList={handleChangeTools} />
                         }
                         {activeStep === 2 &&
-                            <ConfigSelect outputConfig={outputConfig} setConfigType={(e) => {
-                                setOutputConfig(e);
-                            }} />
+                            <OutputScreen result={result} />
                         }
                         {result && activeStep === 3 &&
-                            <OutputScreen outputType={outputConfig} result={result} />
+                            <>
+                                <ConfigSelect setConfigType={(e) => {
+                                    console.log("parent", e)
+                                    setOutputConfig(e);
+                                }} result={latticeResult} />
+                                <JSONOutputScreen result={latticeResult} />
+                            </>
                         }
                     </Box>
                     <Grid container spacing={2}>
@@ -314,7 +318,18 @@ function StaqTool() {
                                             onClick={handleNext}
                                             sx={{ mt: 1, mr: 1 }}
                                         >
-                                            {activeStep === 2 ? 'Calculate' : 'Continue'}
+                                            {activeStep === 2 ? 'Lattice Surgery (Optional)' : 'Continue'}
+                                        </Button>
+                                    )
+                                }
+                                {isLastStep() &&
+                                    (
+                                        <Button
+                                            variant="contained"
+                                            onClick={handleNext}
+                                            sx={{ mt: 1, mr: 1 }}
+                                        >
+                                            Calculate
                                         </Button>
                                     )
                                 }
