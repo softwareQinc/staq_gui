@@ -10,8 +10,9 @@ import ToolBox from '../components/ToolBox';
 import OutputScreen from "../components/OutputScreen";
 import ConfigSelect from "../components/ConfigSelect";
 import JSONOutputScreen from "../components/JSONOutput";
+import QreTool from "../components/Qre";
 
-const steps = ['Upload file', "Select staq tools", "Calculate", "Lattice Surgery (optional)"]
+const steps = ['Upload file', "Select staq tools", "Calculate", "Lattice Surgery (optional)", "Quantum Resource Estimation (optional)"]
 const CONTAINER_WIDTH = '80vw'
 const CONTAINER_HEIGHT = '80vh'
 
@@ -20,6 +21,7 @@ function StaqTool() {
     const [file, setFile] = useState(null);
     const [result, setResult] = useState(null);
     const [latticeResult, setLatticeResult] = useState(null);
+    const [qreResult, setQreResult] = useState(null);
     const [outputConfig, setOutputConfig] = useState({
         mode: 'lattice_surgery',
         qre: false,
@@ -48,13 +50,6 @@ function StaqTool() {
     }
 
     const handleNext = () => {
-        //if (tools.length === 0 && activeStep === 1) {
-        //    setAlertData({
-        //        severity: 'error',
-        //        msg: 'Tools should be selected'
-        //    })
-        //    return;
-        //}
         if (!file && activeStep === 0) {
             setAlertData({
                 severity: 'error',
@@ -62,19 +57,17 @@ function StaqTool() {
             })
             return;
         }
-        //debugger;
-        if (activeStep == 1) {
+        else if (activeStep == 1) {
             getQASMResults();
         }
-        else if (activeStep === 3) {
+        else if (activeStep == 2) {
+            getLatticeSurgeryResults();
+        }
+        else if (activeStep == 4) {
             if (!validateResourceConfig(outputConfig.config)) { return; }
-
-            if (outputConfig.qre) {
-                getQuantumResourceEstimationResults()
-            } else {
-                getLatticeSurgeryResults()
-            }
-        } else {
+            getQuantumResourceEstimationResults()
+        }
+        else {
             setAlertData(null)
             setActiveStep(activeStep + 1);
         }
@@ -195,7 +188,7 @@ function StaqTool() {
             .then(async (res) => {
                 setLatticeResult(res.data);
                 displaySnackbar("Success", 'success')
-                //setActiveStep(activeStep + 1);
+                setActiveStep(activeStep + 1);
             })
             .catch((error) => {
                 console.log(error);
@@ -211,7 +204,7 @@ function StaqTool() {
         httpService.post('staq/qre', formData)
             .then(async (res) => {
                 if (res.statusCode == 200) {
-                    setLatticeResult(res.data);
+                    setQreResult(res.data);
                     displaySnackbar("Success", 'success')
                     //setActiveStep(activeStep + 1);
                 } else {
@@ -281,11 +274,20 @@ function StaqTool() {
                         }
                         {result && activeStep === 3 &&
                             <>
+                                {/*<ConfigSelect setConfigType={(e) => {
+                                    console.log("parent", e)
+                                    setOutputConfig(e);
+                                }} result={latticeResult} />*/}
+                                <JSONOutputScreen result={latticeResult} />
+                            </>
+                        }
+                        {result && activeStep === 4 &&
+                            <>
                                 <ConfigSelect setConfigType={(e) => {
                                     console.log("parent", e)
                                     setOutputConfig(e);
-                                }} result={latticeResult} />
-                                <JSONOutputScreen result={latticeResult} />
+                                }} />
+                                <JSONOutputScreen result={qreResult} />
                             </>
                         }
                     </Box>
