@@ -30,7 +30,7 @@ function ConfigSelect({ setConfigType, result, ...props }) {
             <Box>
                 <Typography variant='h6'>Lattice Surgery</Typography>
                 <Typography variant='body2'>You can edit configuration to get results</Typography>
-                <Accordion style={{ marginTop: 10 }} expanded={true}>
+                <Accordion style={{ marginTop: 10 }}>
                     <AccordionSummary
                         expandIcon={<ExpandMoreIcon />}
                         aria-controls="panel1a-content"
@@ -117,7 +117,7 @@ function ConfigSelect({ setConfigType, result, ...props }) {
                                     <FormControl sx={{ marginBottom: 2 }} >
                                         <TextField required
                                             type='number'
-                                            helperText='Cycle time must be between 1e-2 and 1e-5'
+                                            helperText='p_g, must be between 1e-2 and 1e-5'
                                             id="outlined-required"
                                             //label="p_g"
                                             value={config.config.p_g || 0.001}
@@ -137,7 +137,7 @@ function ConfigSelect({ setConfigType, result, ...props }) {
                                     <FormControl>
                                         <TextField required
                                             type='number'
-                                            helperText='Cycle time must be between 1e-2 and 1e-8'
+                                            helperText='Cycle time, must be between 1e-2 and 1e-8'
                                             id="outlined-required"
                                             //label="Cycle Time"
                                             inputProps={{ min: 1e-8, max: 1e-2 }}
