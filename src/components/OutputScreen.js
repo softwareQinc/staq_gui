@@ -21,7 +21,7 @@ function OutputScreen({ result, ...props }) {
     return (
         <>
             <Box mb={2} style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-                <Typography variant='h6'>Output</Typography>
+                <Typography variant='h6'>Optimize</Typography>
                 <Button variant="outlined" color="success" component="span" onClick={downloadResultAsQASM}>
                     Download QASM file
                 </Button>

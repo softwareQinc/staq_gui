@@ -4,7 +4,7 @@ import { JSONTree } from 'react-json-tree';
 import { TOOLS_CONFIG } from '../constants/constants';
 import CustomSwitch from './Switch';
 
-function JSONOutputScreen({ result, ...props }) {
+function JSONOutputScreen({ result, height, ...props }) {
     const [output, setOutput] = useState(result)
 
     // Download result as QASM
@@ -29,7 +29,7 @@ function JSONOutputScreen({ result, ...props }) {
                             Download JSON file
                         </Button>
                     </Box>
-                    <Box style={{ height: '50vh', overflow: 'hidden', overflowY: 'auto' }}>
+                    <Box style={{ height: height ? height : '50vh', overflow: 'hidden', overflowY: 'auto' }}>
                         <JSONTree data={result} rootName='lattice_surgery'
                             theme={{
                                 //extend: theme,

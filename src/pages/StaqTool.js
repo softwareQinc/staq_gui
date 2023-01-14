@@ -12,7 +12,7 @@ import ConfigSelect from "../components/ConfigSelect";
 import JSONOutputScreen from "../components/JSONOutput";
 import QreTool from "../components/Qre";
 
-const steps = ['Upload file', "Select staq tools", "Calculate", "Lattice Surgery (optional)", "Quantum Resource Estimation (optional)"]
+const steps = ['Upload file', "Select staq tools", "Optimize", "Lattice Surgery (optional)", "Quantum Resource Estimation (optional)"]
 const CONTAINER_WIDTH = '80vw'
 const CONTAINER_HEIGHT = '80vh'
 
@@ -287,7 +287,7 @@ function StaqTool() {
                                     console.log("parent", e)
                                     setOutputConfig(e);
                                 }} />
-                                <JSONOutputScreen result={qreResult} />
+                                <JSONOutputScreen result={qreResult} height={'30vh'} />
                             </>
                         }
                     </Box>

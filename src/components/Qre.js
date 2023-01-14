@@ -30,33 +30,9 @@ function QreTool({ setConfigType, result, ...props }) {
             <Box>
                 <Typography variant='h6'>Lattice Surgery</Typography>
                 <Typography variant='body2'>You can edit configuration to get results</Typography>
-                <Accordion style={{ marginTop: 10 }}>
-                    <AccordionSummary
-                        expandIcon={<ExpandMoreIcon />}
-                        aria-controls="panel1a-content"
-                        id="panel1a-header"
-                        sx={{ backgroundColor: 'lightgray' }}
-                    >
-                        <Typography>Configuration</Typography>
-                    </AccordionSummary>
-                    <AccordionDetails>
-                        {/*<Box>
-                            <RadioGroup
-                                aria-labelledby="demo-row-radio-buttons-group-label"
-                                defaultValue='lattice_surgery'
-                                value={config.mode}
-                                onChange={(e) => {
-                                    console.log("here")
-                                    setConfig({ ...config, mode: e.target.value })
-                                    setConfigType({ ...config, mode: e.target.value })
-                                }}
-                                name="row-radio-buttons-group"
-                            >
-                                <FormControlLabel value="lattice_surgery" control={<Radio />} label="Lattice Surgery" />
-                            </RadioGroup>
-                        </Box>*/}
-                        <Box>
-                            <FormControlLabel control={
+
+                <Box>
+                    {/*<FormControlLabel control={
                                 <Checkbox
                                     checked={config.qre}
                                     onChange={(e) => {
@@ -65,76 +41,65 @@ function QreTool({ setConfigType, result, ...props }) {
                                     }}
                                     inputProps={{ 'aria-label': 'Quantum Resource Estimation' }}
                                 />
-                            } label="Quantum Resource Estimation" />
-                            {
-                                config.qre &&
-                                <Box style={{
-                                    display: 'flex', flexDirection: 'column',
-                                    backgroundColor: '#F2F2F2', borderRadius: 10,
-                                    padding: 15
-                                }}>
-                                    <FormControl sx={{ marginBottom: 2 }} style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                                        <RadioGroup
-                                            row
-                                            aria-labelledby="demo-row-radio-buttons-group-label"
-                                            value={config.config.scheme}
-                                            onChange={(e) => {
-                                                let val = e.target.value
-                                                setConfig({
-                                                    ...config, config: { ...config.config, scheme: val }
-                                                })
-                                                setConfigType({
-                                                    ...config, config: { ...config.config, scheme: val }
-                                                })
-                                            }}
-                                            name="row-radio-buttons-group"
-                                        >
-                                            <FormControlLabel value="fast" control={<Radio />} label="Fast" />
-                                            <FormControlLabel value="compact" control={<Radio />} label="Compact" />
-                                        </RadioGroup>
-                                    </FormControl>
-                                    <FormControl sx={{ marginBottom: 2 }} >
-                                        <TextField required
-                                            type='number'
-                                            helperText='p_g, must be between 1e-2 and 1e-5'
-                                            id="outlined-required"
-                                            //label="p_g"
-                                            value={config.config.p_g || 0.001}
-                                            inputProps={{ min: 1e-5, max: 1e-2 }}
-                                            onChange={(e) => {
-                                                let val = e.target.value
-                                                setConfig({
-                                                    ...config, config: { ...config.config, p_g: val }
-                                                })
-                                                setConfigType({
-                                                    ...config, config: { ...config.config, p_g: val }
-                                                })
-                                            }}
-                                        />
-                                    </FormControl>
-                                    <FormControl>
-                                        <TextField required
-                                            type='number'
-                                            helperText='Cycle time, must be between 1e-2 and 1e-8'
-                                            id="outlined-required"
-                                            //label="Cycle Time"
-                                            inputProps={{ min: 1e-8, max: 1e-2 }}
-                                            value={config.config.cycle_time || 0.00001}
-                                            onChange={(e) => {
-                                                let val = e.target.value
-                                                setConfig({
-                                                    ...config, config: { ...config.config, cycle_time: val }
-                                                })
-                                                setConfigType({
-                                                    ...config, config: { ...config.config, cycle_time: val }
-                                                })
-                                            }} />
-                                    </FormControl>
-                                </Box>
-                            }
-                        </Box>
-                    </AccordionDetails>
-                </Accordion>
+                            } label="Quantum Resource Estimation" />*/}
+                    <FormControl sx={{ marginBottom: 2 }} style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                        <RadioGroup
+                            row
+                            aria-labelledby="demo-row-radio-buttons-group-label"
+                            value={config.config.scheme}
+                            onChange={(e) => {
+                                let val = e.target.value
+                                setConfig({
+                                    ...config, config: { ...config.config, scheme: val }
+                                })
+                                setConfigType({
+                                    ...config, config: { ...config.config, scheme: val }
+                                })
+                            }}
+                            name="row-radio-buttons-group"
+                        >
+                            <FormControlLabel value="fast" control={<Radio />} label="Fast" />
+                            <FormControlLabel value="compact" control={<Radio />} label="Compact" />
+                        </RadioGroup>
+                    </FormControl>
+                    <FormControl sx={{ marginBottom: 2 }} >
+                        <TextField required
+                            type='number'
+                            helperText='p_g, must be between 1e-2 and 1e-5'
+                            id="outlined-required"
+                            //label="p_g"
+                            value={config.config.p_g || 0.001}
+                            inputProps={{ min: 1e-5, max: 1e-2 }}
+                            onChange={(e) => {
+                                let val = e.target.value
+                                setConfig({
+                                    ...config, config: { ...config.config, p_g: val }
+                                })
+                                setConfigType({
+                                    ...config, config: { ...config.config, p_g: val }
+                                })
+                            }}
+                        />
+                    </FormControl>
+                    <FormControl>
+                        <TextField required
+                            type='number'
+                            helperText='Cycle time, must be between 1e-2 and 1e-8'
+                            id="outlined-required"
+                            //label="Cycle Time"
+                            inputProps={{ min: 1e-8, max: 1e-2 }}
+                            value={config.config.cycle_time || 0.00001}
+                            onChange={(e) => {
+                                let val = e.target.value
+                                setConfig({
+                                    ...config, config: { ...config.config, cycle_time: val }
+                                })
+                                setConfigType({
+                                    ...config, config: { ...config.config, cycle_time: val }
+                                })
+                            }} />
+                    </FormControl>
+                </Box>
             </Box>
         </>
     );
