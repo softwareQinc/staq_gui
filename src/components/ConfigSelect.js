@@ -28,7 +28,7 @@ function ConfigSelect({ setConfigType, result, ...props }) {
     return (
         <>
             <Box>
-                <Typography variant='h6'>Lattice Surgery</Typography>
+                <Typography variant='h6'>Quantum Resource Estimation</Typography>
                 <Typography variant='body2'>You can edit configuration to get results</Typography>
                 <Box mt={1} style={{
                     backgroundColor: '#F2F2F2', borderRadius: 10,

@@ -4,13 +4,14 @@ import Box from '@mui/material/Box';
 import FileUpload from '../components/FileUpload';
 import React, { useState } from 'react';
 import httpService from '../services/http.service';
-import { Stepper, Step, StepLabel, StepContent, Alert, Typography, Toolbar, StepButton, Divider, RadioGroup, Radio, FormControlLabel } from '@mui/material';
+import { Stepper, Step, StepLabel, StepContent, Alert, Typography, Toolbar, StepButton, Divider, RadioGroup, Radio, FormControlLabel, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, TextField } from '@mui/material';
 import AlertComponent from '../components/Snackbar';
 import ToolBox from '../components/ToolBox';
 import OutputScreen from "../components/OutputScreen";
 import ConfigSelect from "../components/ConfigSelect";
 import JSONOutputScreen from "../components/JSONOutput";
 import QreTool from "../components/Qre";
+import JSONFileUpload from "../components/JSONFileUpload";
 
 const steps = ['Upload file', "Select staq tools", "Optimize", "Lattice Surgery (optional)", "Quantum Resource Estimation (optional)"]
 const CONTAINER_WIDTH = '80vw'
@@ -40,6 +41,9 @@ function StaqTool() {
     const [activeStep, setActiveStep] = React.useState(0);
     const [completed, setCompleted] = React.useState({});
 
+    //JSON File Dialog
+    const [openFileDialog, setOpenFileDialog] = useState(false)
+
     const displaySnackbar = (msg, severity) => {
         setSnackbarData({ msg: msg, severity: severity })
         setShowSnackbar(true)
@@ -65,7 +69,8 @@ function StaqTool() {
         }
         else if (activeStep == 4) {
             if (!validateResourceConfig(outputConfig.config)) { return; }
-            getQuantumResourceEstimationResults()
+            setOpenFileDialog(true)
+            //getQuantumResourceEstimationResults()
         }
         else {
             setAlertData(null)
@@ -143,10 +148,6 @@ function StaqTool() {
         setTools([])
     };
 
-    //const handleReset = () => {
-    //    setActiveStep(0);
-    //};
-
     const handleChangeTools = (list) => {
         setTools(list);
     }
@@ -218,6 +219,44 @@ function StaqTool() {
             .finally();
     };
 
+    const getQuantumResourceEstimationResultsByJSON = (uploadedFile) => {
+        let formData = new FormData();
+        formData.append("file", uploadedFile);
+        formData.append("config", JSON.stringify({ config: outputConfig.config }))
+        httpService.post('staq/qre/json', formData)
+            .then(async (res) => {
+                if (res.statusCode == 200) {
+                    setQreResult(res.data);
+                    displaySnackbar("Success", 'success')
+                    //setActiveStep(activeStep + 1);
+                } else {
+                    displaySnackbar("Something went wrong", 'error')
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+                displaySnackbar("Something went wrong", 'error')
+            })
+            .finally();
+    };
+
+    const updateFileDialog = (e) => {
+        if (!e) {
+            setOpenFileDialog(false)
+        } else {
+            if (!e.status) {
+                getQuantumResourceEstimationResults();
+            } else {
+                if (!e.file) {
+                    displaySnackbar("Please upload JSON", 'error')
+                    return;
+                }
+                getQuantumResourceEstimationResultsByJSON(e.file)
+            }
+            setOpenFileDialog(false)
+        }
+    }
+
     return (
         <>
             <Toolbar />
@@ -274,20 +313,17 @@ function StaqTool() {
                         }
                         {result && activeStep === 3 &&
                             <>
-                                {/*<ConfigSelect setConfigType={(e) => {
-                                    console.log("parent", e)
-                                    setOutputConfig(e);
-                                }} result={latticeResult} />*/}
+                                <Typography variant='h6'>Lattice Surgery</Typography>
                                 <JSONOutputScreen result={latticeResult} />
                             </>
                         }
                         {result && activeStep === 4 &&
                             <>
                                 <ConfigSelect setConfigType={(e) => {
-                                    console.log("parent", e)
                                     setOutputConfig(e);
                                 }} />
                                 <JSONOutputScreen result={qreResult} height={'30vh'} />
+                                <JSONFileDialog open={openFileDialog} updateFileDialog={updateFileDialog} />
                             </>
                         }
                     </Box>
@@ -340,22 +376,6 @@ function StaqTool() {
                     </Grid>
                 </Grid>
                 <Grid item sm={1}></Grid>
-
-                {/*<Grid item xs={12}>
-                        <Box style={{ marginBottom: 10, height: 60 }}></Box>
-                        {
-                            result &&
-                            <Box className="card-container">
-                                <Box mb={2}>
-                                    <Typography variant='h6'>Output</Typography>
-                                    <Button variant="outlined" color="success" component="span" onClick={downloadResultAsQASM}>
-                                        Download QASM file
-                                    </Button>
-                                </Box>
-                                <Typography variant='body2' style={{ whiteSpace: "pre" }}>{result}</Typography>
-                            </Box>
-                        }
-                    </Grid>*/}
             </Grid>
             {
                 showSnackbar &&
@@ -363,6 +383,41 @@ function StaqTool() {
             }
         </>
     );
+}
+
+function JSONFileDialog({ open, updateFileDialog, ...props }) {
+    const [isUploaded, setIsUploaded] = useState(false);
+    const [file, setFile] = useState(null);
+
+    const onFileUploaded = (e) => {
+        if (!e) {
+            setFile(null);
+            setIsUploaded(false);
+        } else {
+            let file = e;
+            setFile(file);
+            setIsUploaded(true);
+        }
+    };
+    return (
+        <>
+
+            <Dialog open={open}>
+                <DialogTitle>Quantum Resource Estimation</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        For using existing results of lattice surgery press SKIP or upload your JSON to calculate resource estimation.
+                    </DialogContentText>
+                    <JSONFileUpload uploaded={isUploaded} upFile={file} onFileUploaded={onFileUploaded} />
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => { updateFileDialog(false) }}>Close</Button>
+                    <Button onClick={() => { updateFileDialog({ status: false, }) }}>Skip</Button>
+                    <Button onClick={() => { updateFileDialog({ status: true, file: file }) }}>Calculate</Button>
+                </DialogActions>
+            </Dialog>
+        </>
+    )
 }
 
 export default StaqTool;
