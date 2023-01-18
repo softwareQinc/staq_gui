@@ -4,7 +4,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Home from './pages/Home';
 import { AppBar, Box, createMuiTheme, Drawer, IconButton, List, ListItem, ListItemIcon, ListItemText, Toolbar, Typography } from '@mui/material';
-import { BrowserRouter as Router, Switch, Routes, Route, Link, Navigate } from 'react-router-dom';
+import { HashRouter as Router, Switch, Routes, Route, Link, Navigate } from 'react-router-dom';
 import StaqTool from './pages/StaqTool';
 import DrawerComponent from './components/Drawer';
 const theme = createTheme({

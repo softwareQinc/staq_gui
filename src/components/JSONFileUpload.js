@@ -2,7 +2,7 @@ import { Box, Button, Icon, IconButton, Paper, Table, TableBody, TableCell, tabl
 import { useState } from 'react';
 import { styled } from '@mui/material/styles';
 
-function FileUpload({ uploaded, upFile, onFileUploaded, ...props }) {
+function JSONFileUpload({ uploaded, upFile, onFileUploaded, ...props }) {
     const [isUploaded, setIsUploaded] = useState(uploaded ? uploaded : false);
     const [file, setFile] = useState(upFile);
     const handleFileUpload = (e) => {
@@ -13,26 +13,6 @@ function FileUpload({ uploaded, upFile, onFileUploaded, ...props }) {
         onFileUploaded(e.target.files[0])
         setFile(e.target.files[0])
         setIsUploaded(true);
-
-        //  const file = e.target.files[0];
-        //  const { name } = file;
-        //  setFilename(name);
-
-        //  const reader = new FileReader();
-        //  reader.onload = (evt) => {
-        //    if (!evt?.target?.result) {
-        //      return;
-        //    }
-        //    const { result } = evt.target;
-        //    const records = parse(result as string, {
-        //      columns: ["id", "value"],
-        //      delimiter: ";",
-        //      trim: true,
-        //      skip_empty_lines: true
-        //    });
-        //    setCsvData(records);
-        //  };
-        //  reader.readAsBinaryString(file);
     }
 
     const link = document.getElementById('link');
@@ -53,13 +33,13 @@ function FileUpload({ uploaded, upFile, onFileUploaded, ...props }) {
     return (
         <Box>
             <Box sx={{ mb: 3 }}>
-                <Typography variant="h6">Upload your file</Typography>
-                <Typography variant="body2">Upload .qasm file to get results</Typography>
+                {/*<Typography variant="h6">Upload your file</Typography>
+                <Typography variant="body2">Upload .json file to get results</Typography>*/}
             </Box>
             {!isUploaded &&
                 <Box>
                     <input
-                        accept=".qasm"
+                        accept=".json"
                         style={{ display: 'none' }}
                         id="raised-button-file"
                         multiple
@@ -131,4 +111,4 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     },
 }));
 
-export default FileUpload;
+export default JSONFileUpload;

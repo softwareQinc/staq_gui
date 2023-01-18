@@ -16,13 +16,11 @@ function ToolBox({ tools, onChangingList, ...props }) {
     }
 
     const handleDeleteTool = (idx) => {
-        //debugger;
         let tools = selectedTools
-        setSelectedTools([...tools.slice(0, idx), ...tools.slice(idx+1)])
-        onChangingList([...tools.slice(0, idx), ...tools.slice(idx+1)])
+        setSelectedTools([...tools.slice(0, idx), ...tools.slice(idx + 1)])
+        onChangingList([...tools.slice(0, idx), ...tools.slice(idx + 1)])
     }
     const handleParamChange = (paramState, paramIdx, index) => {
-        console.log(paramState, paramIdx, index)
         let tools = selectedTools;
         tools[index]['params'][paramIdx] = paramState;
         setSelectedTools(tools);
@@ -31,8 +29,9 @@ function ToolBox({ tools, onChangingList, ...props }) {
 
     return (
         <Box>
-            <Box sx={{ mt: 1, mb: 1 }}>
+            <Box sx={{ mb: 2 }}>
                 <Typography variant="h6">Staq Tool</Typography>
+                <Typography variant='body2'>Select the tools in sequence to perform calculations</Typography>
             </Box>
             {
                 showAddOption &&
@@ -53,7 +52,7 @@ function ToolBox({ tools, onChangingList, ...props }) {
                     <AddCard key={'addCard'} onAdd={() => { setShowAddOption(true) }} />
                 }
             </ListItem>
-        </Box>
+        </Box >
     );
 }
 
@@ -72,7 +71,6 @@ const Tool = ({ key, item, deleteTool, paramChanged, ...props }) => {
                         item.params.map((param, paramIdx) => {
                             return (
                                 <ParamContainer key={paramIdx} param={param} onChange={(paramState) => {
-                                    console.log(paramState)
                                     paramChanged(paramState, paramIdx)
                                 }} />
                             )
@@ -140,7 +138,6 @@ const ParamContainer = ({ param, onChange, ...props }) => {
         <>
             <Switch checked={paramState.value} size='small' inputProps={{ 'aria-label': paramState.label }}
                 onChange={(event) => {
-                    //debugger;
                     setParamState({ ...paramState, value: event.target.checked })
                     onChange({ ...paramState, value: event.target.checked })
                 }} />
@@ -149,7 +146,6 @@ const ParamContainer = ({ param, onChange, ...props }) => {
 
         //<FormControlLabel checked={paramState.value} control={<CustomSwitch inputProps={{ 'aria-label': paramState.label }}
         //    onChange={(event) => {
-        //        //debugger;
         //        setParamState({ ...paramState, value: event.target.checked })
         //        onChange({ ...paramState, value: event.target.checked })
         //    }} />} label={<Typography variant="overline">{param.label}</Typography>} />
