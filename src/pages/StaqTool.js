@@ -10,7 +10,6 @@ import ToolBox from '../components/ToolBox';
 import OutputScreen from "../components/OutputScreen";
 import ConfigSelect from "../components/ConfigSelect";
 import JSONOutputScreen from "../components/JSONOutput";
-import QreTool from "../components/Qre";
 import JSONFileUpload from "../components/JSONFileUpload";
 
 const steps = ['Upload file', "Select staq tools", "Optimize", "Lattice Surgery (optional)", "Quantum Resource Estimation (optional)"]
@@ -229,6 +228,8 @@ function StaqTool() {
                     setQreResult(res.data);
                     displaySnackbar("Success", 'success')
                     //setActiveStep(activeStep + 1);
+                } else if (res.statusCode == 400) {
+                    displaySnackbar("Wrong JSON format", 'error')
                 } else {
                     displaySnackbar("Something went wrong", 'error')
                 }
@@ -403,17 +404,23 @@ function JSONFileDialog({ open, updateFileDialog, ...props }) {
         <>
 
             <Dialog open={open}>
-                <DialogTitle>Quantum Resource Estimation</DialogTitle>
+                <DialogTitle>QRE</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
-                        For using existing results of lattice surgery press SKIP or upload your JSON to calculate resource estimation.
+                        For existing results of lattice surgery, press CALCULATE, or upload a new JSON file and press CALCULATE after.
                     </DialogContentText>
                     <JSONFileUpload uploaded={isUploaded} upFile={file} onFileUploaded={onFileUploaded} />
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={() => { updateFileDialog(false) }}>Close</Button>
-                    <Button onClick={() => { updateFileDialog({ status: false, }) }}>Skip</Button>
-                    <Button onClick={() => { updateFileDialog({ status: true, file: file }) }}>Calculate</Button>
+                    {/*<Button onClick={() => { updateFileDialog({ status: false, }) }}>Continue</Button>*/}
+                    <Button onClick={() => {
+                        if (!file) {
+                            updateFileDialog({ status: false })
+                        } else {
+                            updateFileDialog({ status: true, file: file })
+                        }
+                    }}>Calculate</Button>
                 </DialogActions>
             </Dialog>
         </>
