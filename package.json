@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "author": "softwareq",
+  "description": "A full-stack quantum processing toolkit",
   "main": "public/electron.js",
   "homepage": "./",
   "dependencies": {
@@ -63,6 +64,16 @@
     ],
     "directories": {
       "buildResources": "assets"
+    },
+    "mac": {
+      "category": "public.staq",
+      "target": [
+        "dmg"
+      ]
+    },
+    "dmg": {
+      "title": "Staq App",
+      "icon": "build/icon.png"
     }
   },
   "eslintConfig": {
