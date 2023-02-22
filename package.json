@@ -74,6 +74,9 @@
     "dmg": {
       "title": "Staq App",
       "icon": "build/icon.png"
+    },
+    "linux": {
+      "target": "AppImage"
     }
   },
   "eslintConfig": {
