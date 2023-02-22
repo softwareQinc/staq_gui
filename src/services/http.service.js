@@ -1,9 +1,12 @@
 import axios from 'axios';
 
 class HttpService {
+
   constructor() {
+    //const { STAQ_SERVICE_IP } = process.env;
+    console.log("ip", process.env.REACT_APP_STAQ_SERVICE_IP)
     axios.defaults.baseURL =
-      'http://172.17.0.2:3000/';
+      process.env.REACT_APP_STAQ_SERVICE_IP ? process.env.REACT_APP_STAQ_SERVICE_IP : 'http://localhost:3000/';
 
     //axios.defaults.headers.post['Content-Type'] =
     //  'application/x-www-form-urlencoded';
