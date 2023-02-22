@@ -35,5 +35,6 @@ RUN yarn build-installer
 
 #WORKDIR /home/test
 USER test
-RUN echo "exec startxfce4" > ~/.xinitrc && chmod +x ~/.xinitrc
+RUN echo "xfce4-terminal &" > ~/.xinitrc
+RUN echo "exec startxfce4" >> ~/.xinitrc && chmod +x ~/.xinitrc
 CMD ["/usr/bin/x11vnc", "-geometry", "1280x800", "-clip", "1280x800", "-create", "-forever"]
