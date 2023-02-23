@@ -34,7 +34,7 @@ yarn electron-pack
 ```bash
 yarn build-installer
 ```
-3. *dist* folder will be created which you can compress and distribute. In *dist* folder you will find *.exe* file which you can install it on your machine.
+3. *dist* folder will be created which you can compress and distribute. In *dist* folder you will find corresponding executable.
 
 **If you want to run the app locally (in same directory)**
 
