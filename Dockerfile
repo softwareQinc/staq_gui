@@ -5,7 +5,9 @@ EXPOSE 22
 
 # Install dependencies
 ENV DEBIAN_FRONTEND=noninteractive
-RUN apt-get update && apt-get install -y firefox-esr x11vnc xvfb openssh-server git vim sudo xfce4 xfce4-goodies software-properties-common npm zlib1g zlib1g-dev curl libfuse2
+RUN apt-get update && apt-get install -y iputils-ping x11vnc xvfb openssh-server git vim sudo xfce4 xfce4-goodies software-properties-common npm zlib1g zlib1g-dev curl libfuse2
+RUN add-apt-repository ppa:mozillateam/ppa
+RUN apt-get -y install firefox
 RUN npm install -g n && n lts
 RUN npm install -g yarn
 
